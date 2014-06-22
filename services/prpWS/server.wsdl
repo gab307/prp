@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:tns="urn:prpWSDL"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             targetNamespace="urn:prpWSDL"
+>
+    <types>
+        <xsd:schema targetNamespace="urn:prpWSDL">
+            <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+            <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+        </xsd:schema>
+    </types>
+    <message name="sysdateOutput">
+        <part name="sysdate" type="xsd:string" />
+    </message>
+    <portType name="prpWSDLPortType">
+        <operation name="sysdate">
+            <documentation>Fecha de la base de datos</documentation>
+            <input message="xsd:integer"/>
+            <output message="tns:sysdateOutput"/>
+        </operation>
+    </portType>
+    <binding name="prpWSDLBinding" type="tns:prpWSDLPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="sysdate">
+            <soap:operation soapAction="urn:prpWSDL#sysdate" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:prpWSDL" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:prpWSDL" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="prpWSDL">
+        <port name="prpWSDLPort" binding="tns:prpWSDLBinding">
+            <soap:address location="http://levitarmouse.com/prpWS/server.php"/>
+        </port>
+    </service>
+</definitions>

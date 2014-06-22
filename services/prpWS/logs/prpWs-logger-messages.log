@@ -1,0 +1,182 @@
+[DEBUG]-[1353280982]->DETECT_CHANGES Session.userId | old value -> [] | new value -> [0]
+[DEBUG]-[1353280982]->DETECT_CHANGES Session.token | old value -> [] | new value -> [bc938778c64f91206f358716472f24bb]
+[DEBUG]-[1353280982]->DETECT_CHANGES Session.httpSessionId | old value -> [] | new value -> [5043108451732c40066eef19686044cc]
+[DEBUG]-[1353280982]->DETECT_CHANGES Session.ip | old value -> [] | new value -> [127.0.0.1]
+[DEBUG]-[1353280982]->DETECT_CHANGES Session.lastUpdate | old value -> [] | new value -> [SYSDATE_STRING]
+[DEBUG]-[1353280982]->insert prp_session values SESSION_ID->[] USER_ID->[0] HTTP_SESSION_ID->[5043108451732c40066eef19686044cc] IP->[127.0.0.1] TOKEN->[bc938778c64f91206f358716472f24bb] LAST_UPDATE->[now()] 
+[DEBUG]-[1353280982]->insert ending with: ()
+[DEBUG]-[1353280982]->DETECT_CHANGES Session.userId | old value -> [0] | new value -> [2]
+[DEBUG]-[1353280982]->DETECT_CHANGES Session.token | old value -> [bc938778c64f91206f358716472f24bb] | new value -> [3ea4858c488f37273ed44215cf91eef9=12390812%2=12390812%5043108451732c40066eef19686044cc]
+[DEBUG]-[1353280982]->update prp_session set USER_ID->[2] TOKEN->[3ea4858c488f37273ed44215cf91eef9=12390812%2=12390812%5043108451732c40066eef19686044cc]  where SESSION_ID->[6951] 
+[DEBUG]-[1353280982]->update ending with: ()
+[DEBUG]-[1353280982]->DETECT_CHANGES Session.lastUpdate | old value -> [2012-11-18 20:23:02] | new value -> [SQL_SYSDATE_STRING]
+[DEBUG]-[1353280982]->update prp_session set LAST_UPDATE->[now()]  where SESSION_ID->[6951] 
+[DEBUG]-[1353280982]->update ending with: ()
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.userId | old value -> [] | new value -> [0]
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.token | old value -> [] | new value -> [2e5c29ec2ceb95c2f823f032de01d730]
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.httpSessionId | old value -> [] | new value -> [666fc38aea4ef52858036d547a09e7cd]
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.ip | old value -> [] | new value -> [127.0.0.1]
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.lastUpdate | old value -> [] | new value -> [SYSDATE_STRING]
+[DEBUG]-[1353280984]->insert prp_session values SESSION_ID->[] USER_ID->[0] HTTP_SESSION_ID->[666fc38aea4ef52858036d547a09e7cd] IP->[127.0.0.1] TOKEN->[2e5c29ec2ceb95c2f823f032de01d730] LAST_UPDATE->[now()] 
+[DEBUG]-[1353280984]->insert ending with: ()
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.userId | old value -> [0] | new value -> [2]
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.token | old value -> [2e5c29ec2ceb95c2f823f032de01d730] | new value -> [11fec75a4d2d12f1b8747234087f3501=12390812%2=12390812%666fc38aea4ef52858036d547a09e7cd]
+[DEBUG]-[1353280984]->update prp_session set USER_ID->[2] TOKEN->[11fec75a4d2d12f1b8747234087f3501=12390812%2=12390812%666fc38aea4ef52858036d547a09e7cd]  where SESSION_ID->[6952] 
+[DEBUG]-[1353280984]->update ending with: ()
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.lastUpdate | old value -> [2012-11-18 20:23:04] | new value -> [SQL_SYSDATE_STRING]
+[DEBUG]-[1353280984]->update prp_session set LAST_UPDATE->[now()]  where SESSION_ID->[6952] 
+[DEBUG]-[1353280984]->update ending with: ()
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.userId | old value -> [] | new value -> [0]
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.token | old value -> [] | new value -> [798876900e2ac39c598a6abcc1894754]
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.httpSessionId | old value -> [] | new value -> [666fc38aea4ef52858036d547a09e7cd]
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.ip | old value -> [] | new value -> [127.0.0.1]
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.lastUpdate | old value -> [] | new value -> [SYSDATE_STRING]
+[DEBUG]-[1353280984]->insert prp_session values SESSION_ID->[] USER_ID->[0] HTTP_SESSION_ID->[666fc38aea4ef52858036d547a09e7cd] IP->[127.0.0.1] TOKEN->[798876900e2ac39c598a6abcc1894754] LAST_UPDATE->[now()] 
+[DEBUG]-[1353280984]->insert ending with: ()
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.userId | old value -> [0] | new value -> [2]
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.token | old value -> [798876900e2ac39c598a6abcc1894754] | new value -> [64d08232b05aee7c393d432e3e0915cf=12390812%2=12390812%666fc38aea4ef52858036d547a09e7cd]
+[DEBUG]-[1353280984]->update prp_session set USER_ID->[2] TOKEN->[64d08232b05aee7c393d432e3e0915cf=12390812%2=12390812%666fc38aea4ef52858036d547a09e7cd]  where SESSION_ID->[6953] 
+[DEBUG]-[1353280984]->update ending with: ()
+[DEBUG]-[1353280984]->DETECT_CHANGES Session.lastUpdate | old value -> [2012-11-18 20:23:04] | new value -> [SQL_SYSDATE_STRING]
+[DEBUG]-[1353280984]->update prp_session set LAST_UPDATE->[now()]  where SESSION_ID->[6952] 
+[DEBUG]-[1353280984]->update ending with: ()
+[DEBUG]-[1353286233]->DETECT_CHANGES Session.userId | old value -> [] | new value -> [0]
+[DEBUG]-[1353286233]->DETECT_CHANGES Session.token | old value -> [] | new value -> [57dcdbf0977b99d5ac180cb4da6cd56c]
+[DEBUG]-[1353286233]->DETECT_CHANGES Session.httpSessionId | old value -> [] | new value -> [59d527bb59eb27cb52c2278c0e2ae5bf]
+[DEBUG]-[1353286233]->DETECT_CHANGES Session.ip | old value -> [] | new value -> [127.0.0.1]
+[DEBUG]-[1353286233]->DETECT_CHANGES Session.lastUpdate | old value -> [] | new value -> [SYSDATE_STRING]
+[DEBUG]-[1353286233]->insert prp_session values SESSION_ID->[] USER_ID->[0] HTTP_SESSION_ID->[59d527bb59eb27cb52c2278c0e2ae5bf] IP->[127.0.0.1] TOKEN->[57dcdbf0977b99d5ac180cb4da6cd56c] LAST_UPDATE->[now()] 
+[DEBUG]-[1353286233]->insert ending with: ()
+[DEBUG]-[1353286234]->DETECT_CHANGES Session.userId | old value -> [0] | new value -> [2]
+[DEBUG]-[1353286234]->DETECT_CHANGES Session.token | old value -> [57dcdbf0977b99d5ac180cb4da6cd56c] | new value -> [1ba858d3e1c351bca7a9cf329441fb03=12390812%2=12390812%59d527bb59eb27cb52c2278c0e2ae5bf]
+[DEBUG]-[1353286234]->update prp_session set USER_ID->[2] TOKEN->[1ba858d3e1c351bca7a9cf329441fb03=12390812%2=12390812%59d527bb59eb27cb52c2278c0e2ae5bf]  where SESSION_ID->[6954] 
+[DEBUG]-[1353286234]->update ending with: ()
+[DEBUG]-[1353286235]->DETECT_CHANGES Session.lastUpdate | old value -> [2012-11-18 21:50:34] | new value -> [SQL_SYSDATE_STRING]
+[DEBUG]-[1353286315]->update prp_session set LAST_UPDATE->[now()]  where SESSION_ID->[6954] 
+[DEBUG]-[1353286315]->update ending with: ()
+[DEBUG]-[1353286318]->DETECT_CHANGES Session.userId | old value -> [] | new value -> [0]
+[DEBUG]-[1353286318]->DETECT_CHANGES Session.token | old value -> [] | new value -> [e2ef41094a6eca08f8a127c99a26ca15]
+[DEBUG]-[1353286318]->DETECT_CHANGES Session.httpSessionId | old value -> [] | new value -> [0db31aeba5dd78134c0b18e5c6ffbed8]
+[DEBUG]-[1353286318]->DETECT_CHANGES Session.ip | old value -> [] | new value -> [127.0.0.1]
+[DEBUG]-[1353286318]->DETECT_CHANGES Session.lastUpdate | old value -> [] | new value -> [SYSDATE_STRING]
+[DEBUG]-[1353286318]->insert prp_session values SESSION_ID->[] USER_ID->[0] HTTP_SESSION_ID->[0db31aeba5dd78134c0b18e5c6ffbed8] IP->[127.0.0.1] TOKEN->[e2ef41094a6eca08f8a127c99a26ca15] LAST_UPDATE->[now()] 
+[DEBUG]-[1353286318]->insert ending with: ()
+[DEBUG]-[1353286319]->DETECT_CHANGES Session.userId | old value -> [0] | new value -> [2]
+[DEBUG]-[1353286319]->DETECT_CHANGES Session.token | old value -> [e2ef41094a6eca08f8a127c99a26ca15] | new value -> [1c3c4fa723af293ac04d9b5524adef63=12390812%2=12390812%0db31aeba5dd78134c0b18e5c6ffbed8]
+[DEBUG]-[1353286319]->update prp_session set USER_ID->[2] TOKEN->[1c3c4fa723af293ac04d9b5524adef63=12390812%2=12390812%0db31aeba5dd78134c0b18e5c6ffbed8]  where SESSION_ID->[6955] 
+[DEBUG]-[1353286319]->update ending with: ()
+[DEBUG]-[1353286320]->DETECT_CHANGES Session.lastUpdate | old value -> [2012-11-18 21:51:59] | new value -> [SQL_SYSDATE_STRING]
+[DEBUG]-[1353286494]->update prp_session set LAST_UPDATE->[now()]  where SESSION_ID->[6955] 
+[DEBUG]-[1353286494]->update ending with: ()
+[DEBUG]-[1353286819]->DETECT_CHANGES Session.userId | old value -> [] | new value -> [0]
+[DEBUG]-[1353286819]->DETECT_CHANGES Session.token | old value -> [] | new value -> [9b2793aa125f2072a1bd80577e3e0bb8]
+[DEBUG]-[1353286819]->DETECT_CHANGES Session.httpSessionId | old value -> [] | new value -> [4a76cb45f734ae4eec99fb2d3fed0bfa]
+[DEBUG]-[1353286819]->DETECT_CHANGES Session.ip | old value -> [] | new value -> [127.0.0.1]
+[DEBUG]-[1353286819]->DETECT_CHANGES Session.lastUpdate | old value -> [] | new value -> [SYSDATE_STRING]
+[DEBUG]-[1353286819]->insert prp_session values SESSION_ID->[] USER_ID->[0] HTTP_SESSION_ID->[4a76cb45f734ae4eec99fb2d3fed0bfa] IP->[127.0.0.1] TOKEN->[9b2793aa125f2072a1bd80577e3e0bb8] LAST_UPDATE->[now()] 
+[DEBUG]-[1353286819]->insert ending with: ()
+[DEBUG]-[1353286820]->DETECT_CHANGES Session.userId | old value -> [0] | new value -> [2]
+[DEBUG]-[1353286820]->DETECT_CHANGES Session.token | old value -> [9b2793aa125f2072a1bd80577e3e0bb8] | new value -> [6adaacafc6741b16b6717a234ca9f198=12390812%2=12390812%4a76cb45f734ae4eec99fb2d3fed0bfa]
+[DEBUG]-[1353286820]->update prp_session set USER_ID->[2] TOKEN->[6adaacafc6741b16b6717a234ca9f198=12390812%2=12390812%4a76cb45f734ae4eec99fb2d3fed0bfa]  where SESSION_ID->[6956] 
+[DEBUG]-[1353286820]->update ending with: ()
+[DEBUG]-[1353286821]->DETECT_CHANGES Session.lastUpdate | old value -> [2012-11-18 22:00:20] | new value -> [SQL_SYSDATE_STRING]
+[DEBUG]-[1353286886]->update prp_session set LAST_UPDATE->[now()]  where SESSION_ID->[6956] 
+[DEBUG]-[1353286886]->update ending with: ()
+[DEBUG]-[1353286889]->DETECT_CHANGES Session.userId | old value -> [] | new value -> [0]
+[DEBUG]-[1353286889]->DETECT_CHANGES Session.token | old value -> [] | new value -> [641e38ab9817fc29c57bdf26f91f95c2]
+[DEBUG]-[1353286889]->DETECT_CHANGES Session.httpSessionId | old value -> [] | new value -> [67888512225e2f83873acf3c3cf2d9ea]
+[DEBUG]-[1353286889]->DETECT_CHANGES Session.ip | old value -> [] | new value -> [127.0.0.1]
+[DEBUG]-[1353286889]->DETECT_CHANGES Session.lastUpdate | old value -> [] | new value -> [SYSDATE_STRING]
+[DEBUG]-[1353286889]->insert prp_session values SESSION_ID->[] USER_ID->[0] HTTP_SESSION_ID->[67888512225e2f83873acf3c3cf2d9ea] IP->[127.0.0.1] TOKEN->[641e38ab9817fc29c57bdf26f91f95c2] LAST_UPDATE->[now()] 
+[DEBUG]-[1353286889]->insert ending with: ()
+[DEBUG]-[1353286889]->DETECT_CHANGES Session.userId | old value -> [0] | new value -> [2]
+[DEBUG]-[1353286889]->DETECT_CHANGES Session.token | old value -> [641e38ab9817fc29c57bdf26f91f95c2] | new value -> [42db81c06826b63eeece29bac75eb70f=12390812%2=12390812%67888512225e2f83873acf3c3cf2d9ea]
+[DEBUG]-[1353286889]->update prp_session set USER_ID->[2] TOKEN->[42db81c06826b63eeece29bac75eb70f=12390812%2=12390812%67888512225e2f83873acf3c3cf2d9ea]  where SESSION_ID->[6957] 
+[DEBUG]-[1353286889]->update ending with: ()
+[DEBUG]-[1353286890]->DETECT_CHANGES Session.lastUpdate | old value -> [2012-11-18 22:01:29] | new value -> [SQL_SYSDATE_STRING]
+[DEBUG]-[1353287002]->update prp_session set LAST_UPDATE->[now()]  where SESSION_ID->[6957] 
+[DEBUG]-[1353287002]->update ending with: ()
+[DEBUG]-[1353287025]->DETECT_CHANGES Session.userId | old value -> [] | new value -> [0]
+[DEBUG]-[1353287025]->DETECT_CHANGES Session.token | old value -> [] | new value -> [67180f3495f53fd4c00a0ca9619974cc]
+[DEBUG]-[1353287025]->DETECT_CHANGES Session.httpSessionId | old value -> [] | new value -> [4d5774107a3281d74a9e811b8a6c550c]
+[DEBUG]-[1353287025]->DETECT_CHANGES Session.ip | old value -> [] | new value -> [127.0.0.1]
+[DEBUG]-[1353287025]->DETECT_CHANGES Session.lastUpdate | old value -> [] | new value -> [SYSDATE_STRING]
+[DEBUG]-[1353287025]->insert prp_session values SESSION_ID->[] USER_ID->[0] HTTP_SESSION_ID->[4d5774107a3281d74a9e811b8a6c550c] IP->[127.0.0.1] TOKEN->[67180f3495f53fd4c00a0ca9619974cc] LAST_UPDATE->[now()] 
+[DEBUG]-[1353287025]->insert ending with: ()
+[DEBUG]-[1353287026]->DETECT_CHANGES Session.userId | old value -> [0] | new value -> [2]
+[DEBUG]-[1353287026]->DETECT_CHANGES Session.token | old value -> [67180f3495f53fd4c00a0ca9619974cc] | new value -> [e1b965a19283097b6ac28a331691ad0e=12390812%2=12390812%4d5774107a3281d74a9e811b8a6c550c]
+[DEBUG]-[1353287026]->update prp_session set USER_ID->[2] TOKEN->[e1b965a19283097b6ac28a331691ad0e=12390812%2=12390812%4d5774107a3281d74a9e811b8a6c550c]  where SESSION_ID->[6958] 
+[DEBUG]-[1353287026]->update ending with: ()
+[DEBUG]-[1353287027]->DETECT_CHANGES Session.lastUpdate | old value -> [2012-11-18 22:03:46] | new value -> [SQL_SYSDATE_STRING]
+[DEBUG]-[1353287056]->update prp_session set LAST_UPDATE->[now()]  where SESSION_ID->[6958] 
+[DEBUG]-[1353287056]->update ending with: ()
+[DEBUG]-[1353287079]->DETECT_CHANGES Session.userId | old value -> [] | new value -> [0]
+[DEBUG]-[1353287079]->DETECT_CHANGES Session.token | old value -> [] | new value -> [81f6ebe9dd645b3526f8d215293ea407]
+[DEBUG]-[1353287079]->DETECT_CHANGES Session.httpSessionId | old value -> [] | new value -> [22c60178d1044e57ca682a4c460eae25]
+[DEBUG]-[1353287079]->DETECT_CHANGES Session.ip | old value -> [] | new value -> [127.0.0.1]
+[DEBUG]-[1353287079]->DETECT_CHANGES Session.lastUpdate | old value -> [] | new value -> [SYSDATE_STRING]
+[DEBUG]-[1353287079]->insert prp_session values SESSION_ID->[] USER_ID->[0] HTTP_SESSION_ID->[22c60178d1044e57ca682a4c460eae25] IP->[127.0.0.1] TOKEN->[81f6ebe9dd645b3526f8d215293ea407] LAST_UPDATE->[now()] 
+[DEBUG]-[1353287079]->insert ending with: ()
+[DEBUG]-[1353287079]->DETECT_CHANGES Session.userId | old value -> [0] | new value -> [2]
+[DEBUG]-[1353287079]->DETECT_CHANGES Session.token | old value -> [81f6ebe9dd645b3526f8d215293ea407] | new value -> [b8e310e4b87ad27a52c3f6f28037555e=12390812%2=12390812%22c60178d1044e57ca682a4c460eae25]
+[DEBUG]-[1353287079]->update prp_session set USER_ID->[2] TOKEN->[b8e310e4b87ad27a52c3f6f28037555e=12390812%2=12390812%22c60178d1044e57ca682a4c460eae25]  where SESSION_ID->[6959] 
+[DEBUG]-[1353287079]->update ending with: ()
+[DEBUG]-[1353287080]->DETECT_CHANGES Session.lastUpdate | old value -> [2012-11-18 22:04:39] | new value -> [SQL_SYSDATE_STRING]
+[DEBUG]-[1353287146]->update prp_session set LAST_UPDATE->[now()]  where SESSION_ID->[6959] 
+[DEBUG]-[1353287146]->update ending with: ()
+[DEBUG]-[1353287160]->DETECT_CHANGES Session.userId | old value -> [] | new value -> [0]
+[DEBUG]-[1353287160]->DETECT_CHANGES Session.token | old value -> [] | new value -> [8135c44bf6f7bb0d0dcf57a788c15797]
+[DEBUG]-[1353287160]->DETECT_CHANGES Session.httpSessionId | old value -> [] | new value -> [f159a33130e990436277ad4d20a613a6]
+[DEBUG]-[1353287160]->DETECT_CHANGES Session.ip | old value -> [] | new value -> [127.0.0.1]
+[DEBUG]-[1353287160]->DETECT_CHANGES Session.lastUpdate | old value -> [] | new value -> [SYSDATE_STRING]
+[DEBUG]-[1353287160]->insert prp_session values SESSION_ID->[] USER_ID->[0] HTTP_SESSION_ID->[f159a33130e990436277ad4d20a613a6] IP->[127.0.0.1] TOKEN->[8135c44bf6f7bb0d0dcf57a788c15797] LAST_UPDATE->[now()] 
+[DEBUG]-[1353287160]->insert ending with: ()
+[DEBUG]-[1353287161]->DETECT_CHANGES Session.userId | old value -> [0] | new value -> [2]
+[DEBUG]-[1353287161]->DETECT_CHANGES Session.token | old value -> [8135c44bf6f7bb0d0dcf57a788c15797] | new value -> [ddaf02746389000cd162dde8a25dd529=12390812%2=12390812%f159a33130e990436277ad4d20a613a6]
+[DEBUG]-[1353287161]->update prp_session set USER_ID->[2] TOKEN->[ddaf02746389000cd162dde8a25dd529=12390812%2=12390812%f159a33130e990436277ad4d20a613a6]  where SESSION_ID->[6960] 
+[DEBUG]-[1353287161]->update ending with: ()
+[DEBUG]-[1353287162]->DETECT_CHANGES Session.lastUpdate | old value -> [2012-11-18 22:06:01] | new value -> [SQL_SYSDATE_STRING]
+[DEBUG]-[1353287478]->update prp_session set LAST_UPDATE->[now()]  where SESSION_ID->[6960] 
+[DEBUG]-[1353287478]->update ending with: ()
+[DEBUG]-[1353287482]->DETECT_CHANGES Session.userId | old value -> [] | new value -> [0]
+[DEBUG]-[1353287482]->DETECT_CHANGES Session.token | old value -> [] | new value -> [fbfa9f80585ec97e1eebcb34e383ddad]
+[DEBUG]-[1353287482]->DETECT_CHANGES Session.httpSessionId | old value -> [] | new value -> [e3b38021034216a34002aeddd6e7dc12]
+[DEBUG]-[1353287482]->DETECT_CHANGES Session.ip | old value -> [] | new value -> [127.0.0.1]
+[DEBUG]-[1353287482]->DETECT_CHANGES Session.lastUpdate | old value -> [] | new value -> [SYSDATE_STRING]
+[DEBUG]-[1353287482]->insert prp_session values SESSION_ID->[] USER_ID->[0] HTTP_SESSION_ID->[e3b38021034216a34002aeddd6e7dc12] IP->[127.0.0.1] TOKEN->[fbfa9f80585ec97e1eebcb34e383ddad] LAST_UPDATE->[now()] 
+[DEBUG]-[1353287482]->insert ending with: ()
+[DEBUG]-[1353287483]->DETECT_CHANGES Session.userId | old value -> [0] | new value -> [2]
+[DEBUG]-[1353287483]->DETECT_CHANGES Session.token | old value -> [fbfa9f80585ec97e1eebcb34e383ddad] | new value -> [d587199261ff733b189231ca369401a4=12390812%2=12390812%e3b38021034216a34002aeddd6e7dc12]
+[DEBUG]-[1353287483]->update prp_session set USER_ID->[2] TOKEN->[d587199261ff733b189231ca369401a4=12390812%2=12390812%e3b38021034216a34002aeddd6e7dc12]  where SESSION_ID->[6961] 
+[DEBUG]-[1353287483]->update ending with: ()
+[DEBUG]-[1353287484]->DETECT_CHANGES Session.lastUpdate | old value -> [2012-11-18 22:11:23] | new value -> [SQL_SYSDATE_STRING]
+[DEBUG]-[1353287484]->update prp_session set LAST_UPDATE->[now()]  where SESSION_ID->[6961] 
+[DEBUG]-[1353287484]->update ending with: ()
+[DEBUG]-[1353287487]->DETECT_CHANGES Session.userId | old value -> [] | new value -> [0]
+[DEBUG]-[1353287487]->DETECT_CHANGES Session.token | old value -> [] | new value -> [6b2837daf8840fbb9a982a2bbfe92a69]
+[DEBUG]-[1353287487]->DETECT_CHANGES Session.httpSessionId | old value -> [] | new value -> [3940c66df1b3f3940cd07f2c6ca46034]
+[DEBUG]-[1353287487]->DETECT_CHANGES Session.ip | old value -> [] | new value -> [127.0.0.1]
+[DEBUG]-[1353287487]->DETECT_CHANGES Session.lastUpdate | old value -> [] | new value -> [SYSDATE_STRING]
+[DEBUG]-[1353287487]->insert prp_session values SESSION_ID->[] USER_ID->[0] HTTP_SESSION_ID->[3940c66df1b3f3940cd07f2c6ca46034] IP->[127.0.0.1] TOKEN->[6b2837daf8840fbb9a982a2bbfe92a69] LAST_UPDATE->[now()] 
+[DEBUG]-[1353287487]->insert ending with: ()
+[DEBUG]-[1353287488]->DETECT_CHANGES Session.userId | old value -> [0] | new value -> [2]
+[DEBUG]-[1353287488]->DETECT_CHANGES Session.token | old value -> [6b2837daf8840fbb9a982a2bbfe92a69] | new value -> [9ab738f5231b20e7cb68da6597bcc2d3=12390812%2=12390812%3940c66df1b3f3940cd07f2c6ca46034]
+[DEBUG]-[1353287488]->update prp_session set USER_ID->[2] TOKEN->[9ab738f5231b20e7cb68da6597bcc2d3=12390812%2=12390812%3940c66df1b3f3940cd07f2c6ca46034]  where SESSION_ID->[6962] 
+[DEBUG]-[1353287488]->update ending with: ()
+[DEBUG]-[1353287489]->DETECT_CHANGES Session.lastUpdate | old value -> [2012-11-18 22:11:28] | new value -> [SQL_SYSDATE_STRING]
+[DEBUG]-[1353287489]->update prp_session set LAST_UPDATE->[now()]  where SESSION_ID->[6962] 
+[DEBUG]-[1353287489]->update ending with: ()
+[DEBUG]-[1353287496]->DETECT_CHANGES Session.userId | old value -> [] | new value -> [0]
+[DEBUG]-[1353287496]->DETECT_CHANGES Session.token | old value -> [] | new value -> [1cd770a7fd9830ac62d8898ccd2bbb13]
+[DEBUG]-[1353287496]->DETECT_CHANGES Session.httpSessionId | old value -> [] | new value -> [391a2b36c26d155d0b0aa801359cd834]
+[DEBUG]-[1353287496]->DETECT_CHANGES Session.ip | old value -> [] | new value -> [127.0.0.1]
+[DEBUG]-[1353287496]->DETECT_CHANGES Session.lastUpdate | old value -> [] | new value -> [SYSDATE_STRING]
+[DEBUG]-[1353287496]->insert prp_session values SESSION_ID->[] USER_ID->[0] HTTP_SESSION_ID->[391a2b36c26d155d0b0aa801359cd834] IP->[127.0.0.1] TOKEN->[1cd770a7fd9830ac62d8898ccd2bbb13] LAST_UPDATE->[now()] 
+[DEBUG]-[1353287496]->insert ending with: ()
+[DEBUG]-[1353287496]->DETECT_CHANGES Session.userId | old value -> [0] | new value -> [2]
+[DEBUG]-[1353287496]->DETECT_CHANGES Session.token | old value -> [1cd770a7fd9830ac62d8898ccd2bbb13] | new value -> [ff4afc7cca3259ee4d82e82c140b2bb1=12390812%2=12390812%391a2b36c26d155d0b0aa801359cd834]
+[DEBUG]-[1353287496]->update prp_session set USER_ID->[2] TOKEN->[ff4afc7cca3259ee4d82e82c140b2bb1=12390812%2=12390812%391a2b36c26d155d0b0aa801359cd834]  where SESSION_ID->[6963] 
+[DEBUG]-[1353287496]->update ending with: ()
+[DEBUG]-[1353287497]->DETECT_CHANGES Session.lastUpdate | old value -> [2012-11-18 22:11:36] | new value -> [SQL_SYSDATE_STRING]
+[DEBUG]-[1353287497]->update prp_session set LAST_UPDATE->[now()]  where SESSION_ID->[6963] 
+[DEBUG]-[1353287497]->update ending with: ()

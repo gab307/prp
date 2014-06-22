@@ -1,0 +1,16 @@
+#Options +FollowSymLinks
+#RewriteEngine On
+#
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule ^ index.php [L]
+
+#<IfModule mod_rewrite.c>
+#    RewriteEngine On
+#
+#    RewriteRule ^(.*)$ public/$1 [L]
+#</IfModule>
+
+php_value xdebug.remote_enable 1
+php_value xdebug.remote_handler dbgp
+php_value xdebug.remote_host 127.0.0.1
