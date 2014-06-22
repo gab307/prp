@@ -14,13 +14,13 @@
     background-image: -o-linear-gradient(top, #FF9B59, #D94804);
     background-image: linear-gradient(top, #FF9B59, #D94804);
     background-repeat: repeat-x;
-    
+
     /* IE 5.5–7 */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FF9B59', endColorstr='#D94804', GradientType=0);
     /* IE 8–9 */
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF9B59', endColorstr='#D94804', GradientType=0)";
     /* IE 10 */
-    -ms-linear-gradient(left, #FF9B59 0%, #D94804 100%);*/
+    /*-ms-linear-gradient(left, #FF9B59 0%, #D94804 100%);*/
 }
 
 .navbar .brand,
