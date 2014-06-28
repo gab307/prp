@@ -25,15 +25,6 @@ if (!defined('SERVICE_PATH')) {
 }
 $service_path = SERVICE_PATH;
 
-//$service_assurance = SA_BASE;
-//
-//if (!defined('AUTOLOAD_PATH')) {
-//    define('AUTOLOAD_PATH', SA_BASE.'Autoload.php');
-//}
-//$autoload_path = AUTOLOAD_PATH;
-
-
-
 if (!defined('LARAVEL_PATH')) {
     define('LARAVEL_PATH', ROOT_PATH.'laravel/');
 }
@@ -44,11 +35,15 @@ if (!defined('LARAVEL_AUTOLOAD_PATH')) {
 }
 $laravel_autoload_path = LARAVEL_AUTOLOAD_PATH;
 
+if (!defined('PRP_BASE')) {
+    define('PRP_BASE', ROOT_PATH.'prp/');
+}
+$prp_base = PRP_BASE;
 
 $aWebServicesPSR0 = array();
 $aWebServicesPSR0[] = EXTERNALS_PATH;
-//SERVICE_PATH.'prpWS/models',
-//);
+$aWebServicesPSR0[] = ROOT_PATH.'prp/models/';
+$aWebServicesPSR0[] = PRP_BASE;
 
 /**
  * Carga el autoloader de classes

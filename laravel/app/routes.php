@@ -11,7 +11,12 @@
   |
  */
 
-Route::get('/', 'Login@checkLogin');
+Route::get('/', function() {
+    global $app;
+    return "hola";
+});
+
+//Route::get('/', 'Login@checkLogin');
 
 Route::get('/login', 'Login@form');
 Route::post('/login', 'Login@login');

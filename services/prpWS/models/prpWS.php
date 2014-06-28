@@ -9,7 +9,7 @@
  *
  * @author gabriel
  */
-class prpWSPurchase
+class prpWS
 {
     /**
      * GetPHPDate
@@ -18,7 +18,7 @@ class prpWSPurchase
      */
     public function getPHPDate()
     {
-        $date = new \prpWS\util\date\Date();
+        $date = new \levitarmouse\util\date\Date();
 
         return $date->getPHPDate();
     }
@@ -32,9 +32,20 @@ class prpWSPurchase
      */
     public function hello($sUser, $sSessionId)
     {
-//        return array('token' => session_id());
+        $aDbConfig = array(
+            'dsn'           => array('host' => 'localhost', 'dbname' => 'prp'),
+            'db_driver'     => 'mysql',
+            'db_user'       => 'root',
+            'db_password'   => 'root',
+            'db_options'    => '',
+            'db_attributes' => '',
+        );
 
-        $oDb = new DB();
+        $oDbProxy = levitarmouse\core\database\PDOProxy::getInstance($aDbConfig);
+
+        $oDb = new levitarmouse\core\database\Database($oDbProxy);
+
+        $aRs = $oDb->select("SELECT * FROM prp_user where user_name like '%GAB%'");
 
         $oDTO = new UserDT($oDb, $sUser);
         if ($sUser == '' || $sSessionId == '') {
@@ -49,32 +60,28 @@ class prpWSPurchase
         else {
             $httpSessionId = $sSessionId;
         }
-        $oDTO = new SessionDTO($oDb, '',
-                               $oUser->userId,
-                               $httpSessionId,
-                               $_SERVER['REMOTE_ADDR']);
+        $oDTO     = new SessionDTO($oDb, '', $oUser->userId, $httpSessionId, $_SERVER['REMOTE_ADDR']);
         $oSession = new Session($oDTO);
 
         $oResponse = new HelloReponse();
 
         if (!$oSession->exists() && $oUser->exists()) {
-            $oSession->userId         = $oUser->userId;
-            $oSession->token          = md5(microtime());
-            $oSession->httpSessionId  = $httpSessionId;
-            $oSession->ip             = $_SERVER['REMOTE_ADDR'];
-            $oSession->lastUpdate     = Config::SYSDATE_STRING;
+            $oSession->userId        = $oUser->userId;
+            $oSession->token         = md5(microtime());
+            $oSession->httpSessionId = $httpSessionId;
+            $oSession->ip            = $_SERVER['REMOTE_ADDR'];
+            $oSession->lastUpdate    = Config::SYSDATE_STRING;
             $oSession->create();
-            $oResponse->message   = 'Bienvenido';
+            $oResponse->message      = 'Bienvenido';
         }
         else {
-            $oResponse->message   = 'otra vez sopa';
+            $oResponse->message = 'otra vez sopa';
         }
 
         $oResponse->token     = $oSession->token;
         $oResponse->sessionId = $oSession->httpSessionId;
         return $oResponse;
     }
-
 
     /**
      * login
@@ -84,14 +91,15 @@ class prpWSPurchase
      *
      * @return LoginReponse $oResponse
      */
-	public function login($userName, $passToken){
+    public function login($userName, $passToken)
+    {
 
         $oHelloResponse = new LoginReponse();
 
         $userName = utf8_decode($userName);
 
         // separador = d6985f552e1f38bc02a74d36c9719de6
-        $separador = Config::SEPARADOR;
+        $separador  = Config::SEPARADOR;
         $aPassToken = explode($separador, $passToken);
 
         $sSessionId = $aPassToken[0];
@@ -105,25 +113,21 @@ class prpWSPurchase
             $oDb = new DB();
 
             $oUserDTO = new UserDTO($oDb, $userName, $sUserPass);
-            $oUser = new User($oUserDTO);
+            $oUser    = new User($oUserDTO);
 
             if ($oUser->exists()) {
-                $sNewToken = md5(rand(1000, 9999).rand(1000, 9999).rand(1000, 9999));
-                $sNewToken.= $separador.$oUser->userId;
-                $sNewToken.= $separador.$sSessionId;
-                $oDTO = new SessionDTO($oDb,
-                                       $sSessionId,
-                                       0,
-                                       $sSessionId,
-                                       $_SERVER['REMOTE_ADDR']);
-                $oSession = new Session($oDTO);
+                $sNewToken = md5(rand(1000, 9999) . rand(1000, 9999) . rand(1000, 9999));
+                $sNewToken.= $separador . $oUser->userId;
+                $sNewToken.= $separador . $sSessionId;
+                $oDTO      = new SessionDTO($oDb, $sSessionId, 0, $sSessionId, $_SERVER['REMOTE_ADDR']);
+                $oSession  = new Session($oDTO);
 
                 if ($oSession->exists()) {
                     $oSession->userId = $oUser->userId;
                     $oSession->token  = $sNewToken;
                     $oSession->modify();
 
-                    $oResponse->hello = utf8_encode('Hello '.$oUser->realName.'!');
+                    $oResponse->hello = utf8_encode('Hello ' . $oUser->realName . '!');
                     $oResponse->token = $sNewToken;
                 }
                 else {
@@ -140,7 +144,7 @@ class prpWSPurchase
         }
 
         return $oResponse;
-	}
+    }
 
     /**
      * expense
@@ -153,17 +157,17 @@ class prpWSPurchase
      */
     public function expense($userName, $token, $xml)
     {
-        $userName    = $userName;
-        $aToken      = explode(Config::SEPARADOR, $token);
-        $sOpToken    = $aToken[0];
-        $iUserId     = $aToken[1];
+        $userName       = $userName;
+        $aToken         = explode(Config::SEPARADOR, $token);
+        $sOpToken       = $aToken[0];
+        $iUserId        = $aToken[1];
         $sHttpSessionId = $aToken[2];
-        $remoteIp = $_SERVER['REMOTE_ADDR'];
+        $remoteIp       = $_SERVER['REMOTE_ADDR'];
 
         $oDb = new DB();
 
         $oSessionDTO = new SessionDTO($oDb, '', $iUserId, $sHttpSessionId, $remoteIp);
-        $oSession = new Session($oSessionDTO);
+        $oSession    = new Session($oSessionDTO);
 
         if ($oSession->exists()) {
             $oSession->lastUpdate = Config::SQL_SYSDATE_STRING;
@@ -183,4 +187,5 @@ class prpWSPurchase
 
         return $sMessage;
     }
+
 }

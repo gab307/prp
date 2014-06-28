@@ -4,7 +4,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-namespace prpWS\util\date;
+namespace levitarmouse\util\date;
 /**
  * Description of Date
  *
