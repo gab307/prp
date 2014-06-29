@@ -10,6 +10,8 @@
  */
 class Session extends levitarmouse\orm\EntityModel
 {
+    
+    
     public function __construct(SessionDTO $dto)
     {
         parent::__construct($dto);
@@ -25,11 +27,13 @@ class Session extends levitarmouse\orm\EntityModel
         try {
             if ($sessionId) {
 
-                $filterDTO = new \levitarmouse\orm\dto\GetByFilterDTO();
+//                $filterDTO = new \levitarmouse\orm\dto\GetByFilterDTO();
 
-                $filterDTO->session_id = $sessionId;
+//                $filterDTO->session_id = $sessionId;
 
-                $this->getByFilter($filterDTO);
+                $this->getBySessionId($sessionId);
+                
+//                $this->getByFilter($filterDTO);
 
             }
 
@@ -45,5 +49,14 @@ class Session extends levitarmouse\orm\EntityModel
         catch (Exception $e) {
             $msg = $e->getMessage();
         }
+    }
+    
+    public function getBySessionId($sessionId)
+    {
+        $result = $this->oMapper->getBySessionId($sessionId);
+        
+        $this->fill($result[0]);
+        
+        return;
     }
 }

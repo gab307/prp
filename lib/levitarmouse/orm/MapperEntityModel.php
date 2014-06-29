@@ -13,13 +13,14 @@
 
 namespace levitarmouse\orm;
 
-use \levitarmouse\orm\dto\GetByFilterDTO;
-use \levitarmouse\orm\dto\GetByIdDTO;
-use \levitarmouse\orm\dto\ModelDTO;
-use \levitarmouse\orm\dto\OrderByDTO;
-use \levitarmouse\orm\interfaces\CollectionInterface;
-use \levitarmouse\orm\interfaces\EntityInterface;
-use \levitarmouse\orm\Mapper as Mapper;
+use levitarmouse\orm\dto\GetByFilterDTO;
+use levitarmouse\orm\dto\GetByIdDTO;
+use levitarmouse\orm\dto\LimitDTO;
+use levitarmouse\orm\dto\ModelDTO;
+use levitarmouse\orm\dto\OrderByDTO;
+use levitarmouse\orm\interfaces\CollectionInterface;
+use levitarmouse\orm\interfaces\EntityInterface;
+use levitarmouse\orm\Mapper as Mapper;
 
 define(MYSQL, 1);
 define(ORACLE, 0);
@@ -296,7 +297,7 @@ implements EntityInterface,
         return $result;
     }
 
-    public function getByFilter(GetByFilterDTO $filterDTO, OrderByDTO $orderDto = null, LimitDTO = null)
+    public function getByFilter(GetByFilterDTO $filterDTO, OrderByDTO $orderDto = null, LimitDTO $limitDto = null)
     {
         $sSchema      = $this->schema;
         $sMainTable   = $this->table;
@@ -311,7 +312,7 @@ implements EntityInterface,
             if (MYSQL) {
                 $sSql = "SELECT @rownum:=@rownum+1 AS ROWNUM";
             }
-            if (ORACLE) {
+            elseif (ORACLE) {
                 $sSql = "SELECT ROWNUM";
             }
 
@@ -462,7 +463,7 @@ implements EntityInterface,
                VALUES ({$sValues})";
 
             $iResult = $this->insert($sSql, $aBnd, $sSchemaTable);
-            $this->oLogger->logDebug("insert ending with: ({$iResult})");
+//            $this->oLogger->logDebug("insert ending with: ({$iResult})");
         }
         return $iResult;
     }

@@ -16,9 +16,9 @@
 
 namespace levitarmouse\orm\interfaces;
 
-use \levitarmouse\orm\dto\GetByFilterDTO;
-use \levitarmouse\orm\dto\LimitDTO;
-use \levitarmouse\orm\dto\OrderByDTO;
+use levitarmouse\orm\dto\GetByFilterDTO;
+use levitarmouse\orm\dto\LimitDTO;
+use levitarmouse\orm\dto\OrderByDTO;
 /**
  * Interface CollectionInterface
  *

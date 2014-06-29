@@ -13,15 +13,16 @@
 
 namespace levitarmouse\orm;
 
-use \Exception;
-use \levitarmouse\orm\dto\EntityDTO;
-use \levitarmouse\orm\dto\GetByFilterDTO;
-use \levitarmouse\orm\dto\GetByIdDTO;
-use \levitarmouse\orm\dto\ModelDTO;
-use \levitarmouse\orm\dto\OrderByDTO;
-use \levitarmouse\orm\interfaces\CollectionInterface;
-use \levitarmouse\orm\interfaces\EntityInterface;
-use \stdClass;
+use Exception;
+use levitarmouse\orm\dto\EntityDTO;
+use levitarmouse\orm\dto\GetByFilterDTO;
+use levitarmouse\orm\dto\GetByIdDTO;
+use levitarmouse\orm\dto\LimitDTO;
+use levitarmouse\orm\dto\ModelDTO;
+use levitarmouse\orm\dto\OrderByDTO;
+use levitarmouse\orm\interfaces\CollectionInterface;
+use levitarmouse\orm\interfaces\EntityInterface;
+use stdClass;
 
 
 
@@ -33,7 +34,7 @@ use \stdClass;
  * @copyright 2012 LM
  * @link      LM
  */
-abstract class EntityModel extends \levitarmouse\orm\Object
+abstract class EntityModel extends Object
 implements EntityInterface, CollectionInterface
 {
 
@@ -48,7 +49,7 @@ implements EntityInterface, CollectionInterface
     const REMOVAL_OK       = 'REMOVAL_OK';     // Se eliminó en la DB
     const REMOVAL_FAILED   = 'REMOVAL_FAILED'; // Falló la eliminación en la DB
 
-    /** @var \levitarmouse\orm\MapperEntityModel $oMapper */
+    /** @var MapperEntityModel $oMapper */
     protected $oMapper;
 
     //abstract function defineMapper();
@@ -91,7 +92,7 @@ implements EntityInterface, CollectionInterface
             //$oModelDto     = new ModelDTO($oDB, $oLogger);
             $this->oMapper = new $modelName($oModelDto);
         } else {
-            $this->oMapper = new \levitarmouse\orm\MapperEntityModel($oModelDto);
+            $this->oMapper = new MapperEntityModel($oModelDto);
         }
 
         $this->hasDescriptor = $this->oMapper->hasDescriptor();
@@ -313,7 +314,7 @@ implements EntityInterface, CollectionInterface
      *
      * return array
      */
-    public function getByFilter(GetByFilterDTO $filterDTO, OrderByDTO $orderDto = null, LimitDTO = null)
+    public function getByFilter(GetByFilterDTO $filterDTO, OrderByDTO $orderDto = null, LimitDTO $limitDto = null)
     {
         $resultSet = $this->oMapper->getByFilter($filterDTO);
 
