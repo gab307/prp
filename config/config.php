@@ -41,9 +41,10 @@ if (!defined('PRP_BASE')) {
 $prp_base = PRP_BASE;
 
 $aWebServicesPSR0 = array();
-$aWebServicesPSR0[] = EXTERNALS_PATH;
+//$aWebServicesPSR0[] = EXTERNALS_PATH;
 $aWebServicesPSR0[] = ROOT_PATH.'prp/models/';
-$aWebServicesPSR0[] = PRP_BASE;
+//$aWebServicesPSR0[] = PRP_BASE;
+$aWebServicesPSR0[] = LIB_PATH;
 
 /**
  * Carga el autoloader de classes

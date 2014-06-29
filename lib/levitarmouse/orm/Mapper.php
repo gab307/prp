@@ -43,7 +43,7 @@ class Mapper extends \levitarmouse\orm\Object
     static $fTime         = 0;
     static $iCountAction  = 0;
 
-    /** @var $oDb DB **/
+    /* @var $oDb \levitarmouse\core\database\Database */
     public $oDb;
     public $oLogger;
 
@@ -279,7 +279,7 @@ EOQ;
             }
             else {
                 $iTimeStart = (microtime(true));
-                $iResult = $this->oDb->sqlExecForBinding($sSql, $aBnd);
+                $iResult = $this->oDb->executeWithBindings($sSql, $aBnd);
                 $iTimeEnd   = (microtime(true));
                 $fTime = vsprintf('%.3f', $iTimeEnd - $iTimeStart);
 
@@ -407,7 +407,7 @@ EOQ;
             }
 //            else {
                 $iTimeStart = (microtime(true));
-                $aResult = $this->oDb->sqlOpenForBinding($sSql, $aBnd);
+                $aResult = $this->oDb->selectWithBindings($sSql, $aBnd);
                 $iTimeEnd   = (microtime(true));
                 $fTime = vsprintf('%.3f', $iTimeEnd - $iTimeStart);
 

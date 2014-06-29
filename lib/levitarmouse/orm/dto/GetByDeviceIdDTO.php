@@ -11,7 +11,7 @@
  * @link      LM
  */
 
-namespace apps\models\orm\dto;
+namespace levitarmouse\orm\dto;
 
 /**
  * GetByDeviceIdDTO class

@@ -20,9 +20,39 @@ class Database
         $this->oDb = $oProxy;
     }
 
+    public function selectWithBindings($sSql, $aBindings)
+    {
+        foreach ($aBindings as $key => $value) {
+            $sSql = str_replace(':'.$key, "'".$value."'", $sSql);
+        }
+
+        $aReturn = $this->oDb->select($sSql);
+//        // examples
+//        $stmt = Database :: prepare($sQuery.';');
+//        $stmt->execute();
+//        $aReturn = $stmt->fetchAll();
+//        $stmt->closeCursor();
+        return $aReturn;
+    }
+
     public function select($sQuery)
     {
         $aReturn = $this->oDb->select($sQuery);
+//        // examples
+//        $stmt = Database :: prepare($sQuery.';');
+//        $stmt->execute();
+//        $aReturn = $stmt->fetchAll();
+//        $stmt->closeCursor();
+        return $aReturn;
+    }
+
+    public function executeWithBindings($sSql, $aBindings)
+    {
+        foreach ($aBindings as $key => $value) {
+            $sSql = str_replace(':'.$key, "'".$value."'", $sSql);
+        }
+
+        $aReturn = $this->oDb->execute($sSql);
 //        // examples
 //        $stmt = Database :: prepare($sQuery.';');
 //        $stmt->execute();

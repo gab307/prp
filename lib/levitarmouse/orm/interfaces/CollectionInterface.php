@@ -16,7 +16,9 @@
 
 namespace levitarmouse\orm\interfaces;
 
-use levitarmouse\orm\dto\GetByExampleDTO;
+use \levitarmouse\orm\dto\GetByFilterDTO;
+use \levitarmouse\orm\dto\LimitDTO;
+use \levitarmouse\orm\dto\OrderByDTO;
 /**
  * Interface CollectionInterface
  *
@@ -38,7 +40,7 @@ interface CollectionInterface
     //public function getAll(\levitarmouse\orm\dto\GetAllDTO $dto);
     public function getAll();
 
-    public function getFiltered();
+    public function getByFilter(GetByFilterDTO $filterDto, OrderByDTO $orderDto = null, LimitDTO $limitDto = null);
 
-    public function getByExample(GetByExampleDTO $exampleDTO);
+//    public function getByExample(GetByExampleDTO $exampleDTO);
 }

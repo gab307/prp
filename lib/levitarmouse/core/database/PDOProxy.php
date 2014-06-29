@@ -91,10 +91,10 @@ class PDOProxy
     {
         // examples
         $stmt = self :: prepare($sQuery . ';');
-        $stmt->execute();
+        $result = $stmt->execute();
 //        $aReturn = $stmt->fetchAll();
 //        $stmt->closeCursor();
-        return $aReturn;
+        return $result;
     }
 
 }

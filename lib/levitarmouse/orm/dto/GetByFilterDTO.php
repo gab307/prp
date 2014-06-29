@@ -13,14 +13,11 @@ namespace levitarmouse\orm\dto;
  *
  * @author gprieto
  */
-class GetFiltered
+class GetByFilterDTO extends DTO
 {
-    public $mixedFilter;
-    public $orderBy;
 
-    function __construct($mixedFilter, $orderBy)
+    public function getFilter()
     {
-        $this->mixedFilter = $mixedFilter;
-        $this->orderBy     = $orderBy;
+        return $this->getAttribs();
     }
 }

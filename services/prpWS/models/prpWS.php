@@ -24,13 +24,53 @@ class prpWS
     }
 
     /**
+     * Hello
+     *
+     * @return string
+     */
+    public function hello()
+    {
+        session_start();
+        $sessionId = session_id();
+        $sessionId = 'g4hq1cfj4vnuluv8t8329rm421';
+
+        $dbConfig = array(
+            'dsn'           => array('host' => 'localhost', 'dbname' => 'prp'),
+            'db_driver'     => 'mysql',
+            'db_user'       => 'root',
+            'db_password'   => 'root',
+            'db_options'    => '',
+            'db_attributes' => '',
+        );
+
+        $oProxy = \levitarmouse\core\database\PDOProxy::getInstance($dbConfig);
+        $oDb = new levitarmouse\core\database\Database($oProxy);
+
+//        $rs = $oDb->select('SELECT * FROM prp_user where user_id = 1');
+
+        $sessionDto = new SessionDTO($oDb, null, $sessionId );
+        $oSession = new Session($sessionDto);
+
+        if ($oSession->exists()) {
+
+        } else {
+            $oSession->session_id = $sessionId;
+            $oSession->create();
+        }
+
+        return $sessionId;
+    }
+
+
+    /**
      *
      * @param string $sUser      User Name
      * @param string $sSessionId SessionId
+     * @param string $token      Token
      *
      * @return array $return Token
      */
-    public function hello($sUser, $sSessionId)
+    public function hello_v1()
     {
         $aDbConfig = array(
             'dsn'           => array('host' => 'localhost', 'dbname' => 'prp'),
@@ -45,9 +85,17 @@ class prpWS
 
         $oDb = new levitarmouse\core\database\Database($oDbProxy);
 
+//        if ($token) {
+//            // validate and update token
+//        } else {
+//            // generate and store token
+//        }
+
+        session_start();
+
         $aRs = $oDb->select("SELECT * FROM prp_user where user_name like '%GAB%'");
 
-        $oDTO = new UserDT($oDb, $sUser);
+        $oDTO = new UserDTO($oDb, $sUser);
         if ($sUser == '' || $sSessionId == '') {
             $oDTO->sUserName = 'guest';
         }

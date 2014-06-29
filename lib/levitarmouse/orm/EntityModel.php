@@ -13,14 +13,17 @@
 
 namespace levitarmouse\orm;
 
-use \Exception,
-    \levitarmouse\orm\dto\EntityDTO,
-    \levitarmouse\orm\dto\GetByIdDTO,
-    \levitarmouse\orm\dto\ModelDTO,
-    \levitarmouse\orm\interfaces\CollectionInterface,
-    \levitarmouse\orm\interfaces\EntityInterface,
-    \stdClass;
-use levitarmouse\orm\dto\GetByExampleDTO;
+use \Exception;
+use \levitarmouse\orm\dto\EntityDTO;
+use \levitarmouse\orm\dto\GetByFilterDTO;
+use \levitarmouse\orm\dto\GetByIdDTO;
+use \levitarmouse\orm\dto\ModelDTO;
+use \levitarmouse\orm\dto\OrderByDTO;
+use \levitarmouse\orm\interfaces\CollectionInterface;
+use \levitarmouse\orm\interfaces\EntityInterface;
+use \stdClass;
+
+
 
 /**
  * EntityModel class
@@ -30,7 +33,7 @@ use levitarmouse\orm\dto\GetByExampleDTO;
  * @copyright 2012 LM
  * @link      LM
  */
-abstract class EntityModel extends Object
+abstract class EntityModel extends \levitarmouse\orm\Object
 implements EntityInterface, CollectionInterface
 {
 
@@ -62,11 +65,11 @@ implements EntityInterface, CollectionInterface
     public $oDb;
 
     protected $_dto;
-    
+
     function __construct(EntityDTO $dto)
     {
         $this->_dto = $dto;
-        
+
         if ($dto->oDB) {
             $this->oDb = $dto->oDB;
         }
@@ -100,10 +103,10 @@ implements EntityInterface, CollectionInterface
         $this->_isLoading   = false;
         $this->objectStatus = self::NO_CREATED;
     }
-    
+
     /**
      * Returns a file descriptor
-     * 
+     *
      * @return string
      */
     protected function getFileDescriptorByConvention()
@@ -117,10 +120,10 @@ implements EntityInterface, CollectionInterface
         $descriptionFileName              = $descriptionFileName . '.ini';
         return $descriptionFileName;
     }
-    
+
     /**
      * Checks if this entity exists
-     * 
+     *
      * @return boolean
      */
     public function exists()
@@ -164,10 +167,10 @@ implements EntityInterface, CollectionInterface
 
         return;
     }
-    
+
     /**
      * Returns the next sequence id
-     * 
+     *
      * @return Ambigous <\levitarmouse\orm\type, NULL>
      */
     public function getNextId()
@@ -284,17 +287,17 @@ implements EntityInterface, CollectionInterface
 
         return $return;
     }
-    
+
     /**
      * Now nothing, check getByExample
-     * 
+     *
      * @return nothing
      */
-    public function getFiltered()
-    {
-        ;
-    }
-    
+//    public function getFiltered()
+//    {
+//        ;
+//    }
+
     /**
      * This method will return an array of ojects which matches the example's
      * set attributes. It supports single value or multiple values for one attribute.
@@ -310,22 +313,22 @@ implements EntityInterface, CollectionInterface
      *
      * return array
      */
-    public function getByExample(GetByExampleDTO $exampleDTO)
+    public function getByFilter(GetByFilterDTO $filterDTO, OrderByDTO $orderDto = null, LimitDTO = null)
     {
-        $resultSet = $this->oMapper->getByExample($exampleDTO);
-        
+        $resultSet = $this->oMapper->getByFilter($filterDTO);
+
         $className = get_class($this);
-        
+
         $return = array();
         $dto = new EntityDTO($this->oDb, $this->oLogger);
         foreach ($resultSet as $key => $row) {
             $obj = new $className($dto);
-            $obj->fillByObject($row);
-        
+            $obj->fill($row);
+
             $return[] = $obj;
         }
         unset($resultSet);
-        
+
         return $return;
     }
 
@@ -335,7 +338,7 @@ implements EntityInterface, CollectionInterface
 
     /**
      * Don´t know. Just filling comments.
-     * 
+     *
      * @return nothing
      */
     public function loadRelated()

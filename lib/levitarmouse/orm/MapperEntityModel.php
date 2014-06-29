@@ -13,12 +13,16 @@
 
 namespace levitarmouse\orm;
 
+use \levitarmouse\orm\dto\GetByFilterDTO;
 use \levitarmouse\orm\dto\GetByIdDTO;
 use \levitarmouse\orm\dto\ModelDTO;
+use \levitarmouse\orm\dto\OrderByDTO;
 use \levitarmouse\orm\interfaces\CollectionInterface;
 use \levitarmouse\orm\interfaces\EntityInterface;
 use \levitarmouse\orm\Mapper as Mapper;
-use levitarmouse\orm\dto\GetByExampleDTO;
+
+define(MYSQL, 1);
+define(ORACLE, 0);
 
 /**
  * MapperEntityModel class
@@ -128,7 +132,7 @@ implements EntityInterface,
     }
     /**
      * Checks if the object has a descriptor associated.
-     * 
+     *
      * @return boolean
      */
     public function hasDescriptor()
@@ -138,13 +142,6 @@ implements EntityInterface,
 
     protected function setFileDescriptorByConvention($className)
     {
-        //$a = get_class($this);
-
-        //$b =
-
-
-
-
         $parts      = explode('\\', $className);
         $importPart = array_pop($parts);
 
@@ -152,30 +149,12 @@ implements EntityInterface,
         $descriptionFileName              = $descriptionFileName . '.ini';
         $this->sEntityDescriptionFileName = $descriptionFileName;
     }
-    /*
-    public function getDbFieldCompanyId()
-    {
-        return (isset($this->sCompanyIdFieldName)) ? $this->sCompanyIdFieldName : '';
-    }
-    public function getDbFieldCrmId()
-    {
-        return (isset($this->sCrmIdDbFieldName)) ? $this->sCrmIdDbFieldName : '';
-    }
-    public function getDbFieldExternalId()
-    {
-        return (isset($this->sExternalIdDbFieldName)) ? $this->sExternalIdDbFieldName : '';
-    }
-    */
+
     public function getPrimaryKey()
     {
         return (isset($this->primary_key)) ? $this->primary_key : '';
     }
-    /*
-    public function getDbFieldInternalId()
-    {
-        return (isset($this->sInternalIdFieldName)) ? $this->sInternalIdFieldName : '';
-    }
-    */
+
     public function getSchema()
     {
         return (isset($this->schema)) ? $this->schema : '';
@@ -239,7 +218,12 @@ implements EntityInterface,
 
         if ($sMainTable != '' && $sIdFieldName != '') {
 
-            $sSql = "SELECT ROWNUM";
+            if (MYSQL) {
+                $sSql = "SELECT @rownum:=@rownum+1 AS ROWNUM";
+            }
+            if (ORACLE) {
+                $sSql = "SELECT ROWNUM";
+            }
 
             foreach ($this->aFieldMapping as $classAttrib => $dbField) {
 
@@ -254,7 +238,13 @@ implements EntityInterface,
             }
             $tableName = ($sSchema) ? $sSchema . '.' . $sMainTable : $sMainTable;
 
-            $sFrom  = " FROM {$tableName} ";
+            if (MYSQL) {
+                $sFrom  = " FROM (SELECT @rownum:=0) r, {$tableName} ";
+            }
+            if (ORACLE) {
+                $sFrom  = " FROM {$tableName} ";
+            }
+
             $sWhere = " WHERE {$sIdFieldName} = :ID ";
 
             $aBnd = array('ID' => $id);
@@ -306,86 +296,78 @@ implements EntityInterface,
         return $result;
     }
 
-    public function getFiltered()
-    {
-        ;
-    }
-    
-    /**
-     * This method will return an array of registers which matches the example's
-     * set attributes. It supports single value or multiple values for one attribute.
-     * The set attributes which are not in the corresponding ini file will not be considered.
-     * 
-     * Ex.: $ex->username = array('aa','bb','cc');
-     *      $ex->lastname = 'pepe';
-     *      $mapperEntityModel->getByEcample($ex);
-     *      This example will bring every register which lastname is 'pepe' and it's username
-     *      is 'aa', 'bb' or 'cc'.      
-     *      
-     * @param GetByExampleDTO $exampleDTO example
-     * 
-     * return array
-     */
-    public function getByExample(GetByExampleDTO $exampleDTO)
+    public function getByFilter(GetByFilterDTO $filterDTO, OrderByDTO $orderDto = null, LimitDTO = null)
     {
         $sSchema      = $this->schema;
         $sMainTable   = $this->table;
-        
+
+        $filter = $filterDTO->getFilter();
+
         if ($sMainTable) {
-            
+
             $aaFieldCompares = array();
             $aBnd = array();
-            
-            
-            $sSql = "SELECT ROWNUM";
-        
+
+            if (MYSQL) {
+                $sSql = "SELECT @rownum:=@rownum+1 AS ROWNUM";
+            }
+            if (ORACLE) {
+                $sSql = "SELECT ROWNUM";
+            }
+
             foreach ($this->aFieldMapping as $classAttrib => $dbField) {
-        
+
                 $sTemp = " {$dbField} ";
-        
+
                 if (isset($this->aFieldMappingRead)) {
                     if (array_key_exists($dbField, $this->aFieldMappingRead)) {
                         $sTemp = ' ' . $this->aFieldMappingRead[$dbField] . ' ';
                     }
                 }
                 $sSql .= ", {$sTemp} ";
-                
-                if (isset($exampleDTO->$classAttrib)) {
-                    $aaFieldCompares[$dbField] = $exampleDTO->$classAttrib;
+
+                if (isset($filterDTO->$classAttrib)) {
+                    $aaFieldCompares[$dbField] = $filterDTO->$classAttrib;
                 }
             }
             $tableName = ($sSchema) ? $sSchema . '.' . $sMainTable : $sMainTable;
-        
-            $sFrom  = " FROM {$tableName} ";
+
+            if (MYSQL) {
+                $sFrom  = " FROM (SELECT @rownum:=0) r, {$tableName} ";
+            }
+            if (ORACLE) {
+                $sFrom  = " FROM {$tableName} ";
+            }
+
             $sWhere = 'WHERE 1 = 1';
-            
+
             foreach($aaFieldCompares as $dbField => $value) {
                 if (is_array($value)) {
                     $sWhere .= " AND $dbField IN (:$dbField)";
                 } else {
-                    $sWhere .= " AND $dbField = :$dbField";    
+                    $sWhere .= " AND $dbField = :$dbField";
                 }
                 $aBnd[$dbField] = $value;
             }
-            
-        
+
+
             //            if ($iControllerId != '') {
             //                $aBnd['CONTROLLERID'] = $iControllerId;
             //                $sWhere .= ' AND CONTROLLERID = :CONTROLLERID ';
             //            }
-        
+
             $sSql .= $sFrom . $sWhere;
-        
+
             // Logging
             foreach ($aBnd as $field => $value) {
                 //                $sLogValues .= @$field.'->['.$value.'] ';
             }
             //            $this->oLogger->logDbChanges("select from {$tableName} where {$sLogValues}", 'SELECT');
-        
+
             $aResult = $this->select($sSql, $aBnd);
-            
+
             //            $this->oLogger->logDbChanges("result: ".serialize($aResult));
-        
+
             if (is_array($aResult)) {
                 return $aResult;
             }
@@ -393,287 +375,17 @@ implements EntityInterface,
         return array();
     }
 
+
     /* ***************************
      * CollectionInterface methods END
      * *************************** */
-
-
-    /**
-     * getById
-     *
-     * @param type $iId Vod Space Id
-     *
-     * @return type
-     */
-//    public function getByCrmId($sCrmId, $iControllerId = '', $iCompanyId = '', $sControllerType = '')
-//    {
-//        $sMainTable          = $this->getDbTableName();
-//        $sCrmIdFieldName     = $this->getDbFieldCrmId();
-//        $sCompanyIdFieldName = $this->getDbFieldCompanyId();
-//        $sControllerTypeFieldName = $this->getDbFieldControllerType();
-//        $sControllerIdFieldName = 'controllerid';
-//
-//        if ($sMainTable != '' && $sCrmIdFieldName != '') {
-//
-//            $sSql  = "SELECT ROWNUM";
-//
-//            foreach ($this->aFieldMapping as $classAttrib => $dbField) {
-//
-//                $sTemp = " {$dbField} ";
-//
-//                if (isset($this->aFieldMappingRead)) {
-//                    if (array_key_exists($dbField, $this->aFieldMappingRead)) {
-//                        $sTemp = ' '.$this->aFieldMappingRead[$dbField].' ';
-//                    }
-//                }
-//                $sSql .= ", {$sTemp} ";
-//            }
-//            $sFrom  = " FROM {$sMainTable} ";
-//            $sWhere = " WHERE {$sCrmIdFieldName} = :CRMID ";
-//
-//            $aBnd = array('CRMID'        => $sCrmId);
-//
-//            if ($iControllerId != '') {
-//                $sWhere .= " AND {$sControllerIdFieldName} = :CONTROLLERID ";
-//                $aBnd['CONTROLLERID'] = $iControllerId;
-//            }
-//
-//            if ($iCompanyId != '') {
-//                $sWhere .= " AND {$sCompanyIdFieldName} = :COMPANYID ";
-//                $aBnd['COMPANYID'] = $iCompanyId;
-//            }
-//
-//            if ($sControllerTypeFieldName != '') {
-//                $sWhere .= " AND {$sControllerTypeFieldName} = :CONTROLLERTYPE ";
-//                $aBnd['CONTROLLERTYPE'] = $sControllerType;
-//            }
-//
-//            $sSql .= $sFrom . $sWhere;
-//
-//            // Logging
-//            foreach ($aBnd as $field => $value) {
-//                $sLogValues .= $field.'->['.$value.'] ';
-//            }
-//            $this->oLogger->logDbChanges("select from {$sMainTable} where {$sLogValues}", 'SELECT');
-//
-//            $aResult = $this->select($sSql, $aBnd);
-//
-//            $this->oLogger->logDbChanges("result: ".serialize($aResult));
-//
-//            if (is_array($aResult) && isset($aResult[0]))
-//            {
-//                return $aResult[0];
-//            }
-//        }
-//        return array();
-//    }
-
-    /**
-     * getByExternalId
-     *
-     * @param type $iId Vod Space Id
-     *
-     * @return type
-     */
-//    public function getByExternalId($iExternalId, $iControllerId = '')
-//    {
-//        $sMainTable           = $this->getDbTableName();
-//        $sExternalIdFieldName = $this->getDbFieldExternalId();
-//
-//        if ($sMainTable != '' && $sExternalIdFieldName != '') {
-//
-//            $sSql  = "SELECT ROWNUM";
-//
-//            foreach ($this->aFieldMapping as $classAttrib => $dbField) {
-//
-//                $sTemp = " {$dbField} ";
-//
-//                if (isset($this->aFieldMappingRead)) {
-//                    if (array_key_exists($dbField, $this->aFieldMappingRead)) {
-//                        $sTemp = ' '.$this->aFieldMappingRead[$dbField].' ';
-//                    }
-//                }
-//                $sSql .= ", {$sTemp} ";
-//            }
-//            $sFrom  = " FROM {$sMainTable} ";
-//            $sWhere = " WHERE {$sExternalIdFieldName} = :EXTERNALID ";
-//
-//            $aBnd = array('EXTERNALID'        => $iExternalId);
-//
-//            if ($iControllerId != '') {
-//                $aBnd['CONTROLLERID'] = $iControllerId;
-//                $sWhere .= ' AND CONTROLLERID = :CONTROLLERID ';
-//            }
-//
-//            $sSql .= $sFrom . $sWhere;
-//
-//            // Logging
-//            foreach ($aBnd as $field => $value) {
-//                $sLogValues .= $field.'->['.$value.'] ';
-//            }
-//            $this->oLogger->logDbChanges("select from {$sMainTable} where {$sLogValues}", 'SELECT');
-//
-//            $aResult = $this->select($sSql, $aBnd);
-//
-//            $this->oLogger->logDbChanges("result: ".serialize($aResult));
-//
-//            if (is_array($aResult) && isset($aResult[0]))
-//            {
-//                return $aResult[0];
-//            }
-//        }
-//        return array();
-//    }
-//    public function getByESPV($idEmpresa, $idServicio, $idProducto, $idVenta)
-//    {
-//        $sMainTable  = $this->getDbTableName();
-//        if ($sMainTable != '') {
-//            $sSql  = "SELECT ROWNUM";
-//
-//            foreach ($this->aFieldMapping as $classAttrib => $dbField) {
-//
-//                $sTemp = " {$dbField} ";
-//
-//                if (isset($this->aFieldMappingRead)) {
-//                    if (array_key_exists($dbField, $this->aFieldMappingRead)) {
-//                        $sTemp = ' '.$this->aFieldMappingRead[$dbField].' ';
-//                    }
-//                }
-//                $sSql .= ", {$sTemp} ";
-//            }
-//
-//            $sFrom = " FROM {$sMainTable}
-//                      WHERE 1 = 1
-//                        AND IDEMPRESA  = :IDEMPRESA
-//                        AND IDSERVICIO = :IDSERVICIO
-//                        AND IDPRODUCTO = :IDPRODUCTO
-//                        AND IDVENTA    = :IDVENTA ";
-//
-//            $aBnd = array('IDEMPRESA'  => $idEmpresa,
-//                          'IDSERVICIO' => $idServicio,
-//                          'IDPRODUCTO' => $idProducto,
-//                          'IDVENTA'    => $idVenta,
-//                         );
-//
-//            $sSql .= $sFrom;
-//
-//            // Logging
-//            foreach ($aBnd as $field => $value) {
-//                $sLogValues .= @$field.'->['.$value.'] ';
-//            }
-//            $this->oLogger->logDbChanges("select from {$sMainTable} where {$sLogValues}", 'SELECT');
-//
-//            $aResult = $this->select($sSql, $aBnd);
-//
-//            $this->oLogger->logDbChanges("result: ".serialize($aResult));
-//
-//            if (is_array($aResult) && isset($aResult[0]))
-//            {
-//                return $aResult[0];
-//            }
-//        }
-//        return array();
-//    }
-//    public function getByESPVC($idEmpresa, $idServicio, $idProducto, $idVenta, $idCliente)
-//    {
-//        $sMainTable  = $this->getDbTableName();
-//        if ($sMainTable != '') {
-//            $sSql  = "SELECT ROWNUM";
-//
-//            foreach ($this->aFieldMapping as $classAttrib => $dbField) {
-//
-//                $sTemp = " {$dbField} ";
-//
-//                if (isset($this->aFieldMappingRead)) {
-//                    if (array_key_exists($dbField, $this->aFieldMappingRead)) {
-//                        $sTemp = ' '.$this->aFieldMappingRead[$dbField].' ';
-//                    }
-//                }
-//                $sSql .= ", {$sTemp} ";
-//
-//            }
-//
-//            $sFrom = " FROM {$sMainTable}
-//                      WHERE 1 = 1
-//                        AND IDEMPRESA  = :IDEMPRESA
-//                        AND IDSERVICIO = :IDSERVICIO
-//                        AND IDPRODUCTO = :IDPRODUCTO
-//                        AND IDVENTA    = :IDVENTA
-//                        AND IDCLIENTE  = :IDCLIENTE ";
-//
-//            $aBnd = array('IDEMPRESA'  => $idEmpresa,
-//                          'IDSERVICIO' => $idServicio,
-//                          'IDPRODUCTO' => $idProducto,
-//                          'IDVENTA'    => $idVenta,
-//                          'IDCLIENTE'  => $idCliente,
-//                         );
-//
-//            $sSql .= $sFrom;
-//
-//            // Logging
-//            foreach ($aBnd as $field => $value) {
-//                $sLogValues .= $field.'->['.$value.'] ';
-//            }
-//            $this->oLogger->logDbChanges("select from {$sMainTable} where {$sLogValues}", 'SELECT');
-//
-//            $aResult = $this->select($sSql, $aBnd);
-//
-//            $this->oLogger->logDbChanges("result: ".serialize($aResult));
-//
-//            if (is_array($aResult) && isset($aResult[0]))
-//            {
-//                return $aResult[0];
-//            }
-//        }
-//        return array();
-//    }
-
-    /**
-     * getByStbId
-     *
-     * @param type $iStbId Vod Space Id
-     *
-     * @return type
-     */
-//    public function getByStbId($iStbId)
-//    {
-//        $sMainTable  = $this->getDbTableName();
-//        if ($sMainTable != '') {
-//
-//            $sSql  = "SELECT ROWNUM ";
-//            foreach ($this->aFieldMapping as $classAttrib => $dbField) {
-//                $sSql .= ", {$dbField} ";
-//            }
-//
-//            $sFrom = " FROM {$sMainTable}
-//                    WHERE STBID = :ID ";
-//
-//            $aBnd = array('ID'  => $iStbId);
-//
-//            $sSql .= $sFrom;
-//
-//            // Logging
-//            $this->oLogger->logDbChanges("select from {$sMainTable} where STBID->[{$iStbId}]", 'SELECT');
-//
-//            $aResult = $this->select($sSql, $aBnd);
-//
-//            $this->oLogger->logDbChanges("result: ".serialize($aResult));
-//
-//            if (is_array($aResult) && isset($aResult[0])) {
-//                return $aResult[0];
-//            }
-//        }
-//        return array();
-//    }
-//    public function getByESPVP($idEmpresaPadre, $idServicioPadre, $idProductoPadre, $idVentaPadre)
-//    {
-//
-//    }
 
     public function create($aValues)
     {
         $sLogValues = '';
         $sMainTable = $this->getTableName();
+        $sSchema    = $this->getSchema();
+
         $iResult    = false;
         if ($sMainTable != '') {
             $aBnd    = array();
@@ -738,17 +450,18 @@ implements EntityInterface,
                 $bFirst = false;
             }
 
-            // Logging
-            $this->oLogger->logDbChanges("insert {$sMainTable} values {$sLogValues}", 'INSERT');
+            $sSchemaTable = ($sSchema) ? $sSchema . '.' . $sMainTable : $sMainTable;
 
-            $sSchemaTable = $this->getSchema() . '.' . $this->getTableName();
+            // Logging
+//            $this->oLogger->logDbChanges("insert {$sSchemaTable} values {$sLogValues}", 'INSERT');
+
 
             $sSql = "
                 INSERT INTO {$sSchemaTable}
                       ({$sFields})
                VALUES ({$sValues})";
 
-            $iResult = $this->insert($sSql, $aBnd, $sMainTable);
+            $iResult = $this->insert($sSql, $aBnd, $sSchemaTable);
             $this->oLogger->logDebug("insert ending with: ({$iResult})");
         }
         return $iResult;
