@@ -75,9 +75,8 @@ implements EntityInterface, CollectionInterface
             $this->oDb = $dto->oDB;
         }
         if ($dto->oLogger) {
-            $this->oLogger = $dto->oLogger;
+            $this->oLogger = new DbLogger($dto->oLogger);
         }
-
 
         $sFileDescriptor = $this->getFileDescriptorByConvention();
 
@@ -381,14 +380,15 @@ implements EntityInterface, CollectionInterface
         $iResult = 0;
         $aWhere  = array();
 
-        $aUniqueKey = $this->oMapper->getFieldMappingUniqueKey();
+        $aUniqueKey = $this->oMapper->getPrimaryKey();
         if (is_array($aUniqueKey) && count($aUniqueKey) > 0) {
             try {
                 foreach ($aUniqueKey as $sField => $sAttrib) {
-                    if ($this->$sAttrib === null) {
+                    $attrib = $this->oMapper->getAttribByFieldName($sAttrib);
+                    if ($this->{$attrib->attribName} === null) {
                         throw new Exception('MAPPED_ENTITY_ERROR_COULD_NOT_DETERMINE_CONDITION_FOR_MODIFICATION');
                     }
-                    $aWhere[$sField] = $this->$sAttrib;
+                    $aWhere[$sAttrib] = $this->{$attrib->attribName};
                 }
 
                 $aValues = $this->getValues(true);
@@ -489,8 +489,8 @@ implements EntityInterface, CollectionInterface
                     if ($bWasChanged) {
                         $this->hasChanges |= true;
                         $this->aListChange[$sAttrib] = array('oldValue' => $oldValue, 'newValue' => $newValue);
-//                        $this->oLogger->logDetectChanges(get_class($this).'.'.$sAttrib.
-//                                                         " | old value -> [{$oldValue}] | new value -> [{$newValue}]");
+                        $this->oLogger->logDetectChanges(get_class($this).'.'.$sAttrib.
+                                                         " | old value -> [{$oldValue}] | new value -> [{$newValue}]");
                     }
                 }
             }

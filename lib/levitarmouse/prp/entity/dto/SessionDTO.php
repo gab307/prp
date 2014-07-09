@@ -6,6 +6,8 @@
  * @link      www.levitarmouse.com
  */
 
+namespace levitarmouse\prp\entity\dto;
+
 /**
  * Description of UserDTO
  *

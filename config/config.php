@@ -35,15 +35,21 @@ if (!defined('LARAVEL_AUTOLOAD_PATH')) {
 }
 $laravel_autoload_path = LARAVEL_AUTOLOAD_PATH;
 
-if (!defined('PRP_BASE')) {
-    define('PRP_BASE', ROOT_PATH.'prp/');
+if (!defined('LEVITARMOUSE_BASE')) {
+    define('LEVITARMOUSE_BASE', ROOT_PATH.'levitarmouse/classes/');
 }
-$prp_base = PRP_BASE;
+$levitarmouse_ns_base = LEVITARMOUSE_BASE;
+
+if (!defined('PRP_WS_BASE')) {
+    define('PRP_WS_BASE', SERVICE_PATH.'prpWS/models/');
+}
+$levitarmouse_ns_base = LEVITARMOUSE_BASE;
 
 $aWebServicesPSR0 = array();
 //$aWebServicesPSR0[] = EXTERNALS_PATH;
-$aWebServicesPSR0[] = ROOT_PATH.'prp/models/';
-//$aWebServicesPSR0[] = PRP_BASE;
+//$aWebServicesPSR0[] = ROOT_PATH.'prp/models/';
+$aWebServicesPSR0[] = LEVITARMOUSE_BASE;
+$aWebServicesPSR0[] = PRP_WS_BASE;
 $aWebServicesPSR0[] = LIB_PATH;
 
 /**

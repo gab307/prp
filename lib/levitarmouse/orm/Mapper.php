@@ -320,7 +320,7 @@ EOQ;
             }
             else {
                 $iTimeStart = (microtime(true));
-                $iResult = $this->oDb->sqlExecForBinding($sSql, $aBnd);
+                $iResult = $this->oDb->executeWithBindings($sSql, $aBnd);
                 $iTimeEnd   = (microtime(true));
                 $fTime = vsprintf('%.3f', $iTimeEnd - $iTimeStart);
 

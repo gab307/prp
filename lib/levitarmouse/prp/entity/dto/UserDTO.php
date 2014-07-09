@@ -1,32 +1,19 @@
 <?php
 
-/*
- * @package   prpWS
- * @author    Gabriel Prieto <gabriel@levitarmouse.com>
- * @copyright Levitarmouse.com 2012
- * @link      www.levitarmouse.com
- */
+namespace levitarmouse\prp\entity\dto;
 
-/**
- * Description of UserDTO
- *
- * @package   prpWS
- * @author    Gabriel Prieto <gabriel@levitarmouse.com>
- * @copyright Levitarmouse.com 2012
- * @link      www.levitarmouse.com
- */
-class UserDTO extends \prp\entity\dto\DTO
+class UserDTO extends \levitarmouse\orm\dto\EntityDTO
 {
-    public $sUserName;
-    public $sUserPass;
+    public $userId;
+    public $userName;
+    public $hashedPassword;
 
-    function __construct($oDb, $sUserName = '', $sUserPass = '')
+    function __construct($oDB, $oLogger, $userId, $userName, $hashedPassword)
     {
-        $this->oDb = $oDb;
-        $this->sUserName = $sUserName;
-        $this->sUserPass = $sUserPass;
+        parent::__construct($oDB, $oLogger);
+
+        $this->userId = $userId;
+        $this->userName = $userName;
+        $this->hashedPassword = $hashedPassword;
     }
-
 }
-
-?>

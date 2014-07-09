@@ -11,6 +11,25 @@
  */
 class prpWS
 {
+    protected $oDb;
+    protected $oLogger;
+
+    public function __construct()
+    {
+        $dbConfig  = array(
+            'dsn'           => array('host' => 'localhost', 'dbname' => 'prp'),
+            'db_driver'     => 'mysql',
+            'db_user'       => 'root',
+            'db_password'   => 'root',
+            'db_options'    => '',
+            'db_attributes' => '',
+        );
+        $oProxy    = \levitarmouse\core\database\PDOProxy::getInstance($dbConfig);
+        $this->oDb = new levitarmouse\core\database\Database($oProxy);
+
+        $this->oLogger = new \levitarmouse\core\log\Logger('PRP', 'logs/messages.log');
+    }
+
     /**
      * GetPHPDate
      *
@@ -26,172 +45,170 @@ class prpWS
     /**
      * Hello
      *
-     * @return string
+     * @param string $token Token
+     *
+     * @return object
      */
-    public function hello()
+    public function hello($token)
     {
         session_start();
-        $sessionId = session_id();
-        $sessionId = 'g4hq1cfj4vnuluv8t8329rm421';
+        if ($token) {
+            $sessionId = $token;
+            $bToken    = true;
+        }
+        else {
+            $sessionId = session_id();
+            $bToken    = false;
+        }
 
-        $dbConfig = array(
-            'dsn'           => array('host' => 'localhost', 'dbname' => 'prp'),
-            'db_driver'     => 'mysql',
-            'db_user'       => 'root',
-            'db_password'   => 'root',
-            'db_options'    => '',
-            'db_attributes' => '',
-        );
-
-        $oProxy = \levitarmouse\core\database\PDOProxy::getInstance($dbConfig);
-        $oDb = new levitarmouse\core\database\Database($oProxy);
-
-//        $rs = $oDb->select('SELECT * FROM prp_user where user_id = 1');
-
-        $sessionDto = new SessionDTO($oDb, null, $sessionId );
-        $oSession = new Session($sessionDto);
+        $sessionDto = new \levitarmouse\prp\entity\dto\SessionDTO($this->oDb, $this->oLogger, $sessionId);
+        $oSession   = new levitarmouse\prp\entity\Session($sessionDto);
 
         if ($oSession->exists()) {
-
-        } else {
-            $oSession->session_id = $sessionId;
-            $oSession->create();
+            $oSession->update();
+        }
+        else {
+            if ($bToken) {
+                $sessionId = null;
+                session_destroy();
+            }
+            else {
+                $oSession->create();
+            }
         }
 
-        return $sessionId;
+        $return            = new stdClass();
+        $return->sessionId = $sessionId;
+
+        return $return;
     }
 
-
     /**
+     * encryptionTest
      *
-     * @param string $sUser      User Name
-     * @param string $sSessionId SessionId
-     * @param string $token      Token
+     * @param string $string
      *
-     * @return array $return Token
+     * @return object
      */
-    public function hello_v1()
+    public function encryptionTest($string)
     {
-        $aDbConfig = array(
-            'dsn'           => array('host' => 'localhost', 'dbname' => 'prp'),
-            'db_driver'     => 'mysql',
-            'db_user'       => 'root',
-            'db_password'   => 'root',
-            'db_options'    => '',
-            'db_attributes' => '',
-        );
+        $start      = microtime(true);
+        $encryption = \levitarmouse\core\encryption\Encryption::encrypt($string, "123");
+        //    $enc = new Illuminate\Encryption\Encrypter("123");
+        $string2    = \levitarmouse\core\encryption\Encryption::decrypt($encryption, "123");
+        //    $encryption = $enc->decrypt($encryption);
+        $time       = microtime(true) - $start;
 
-        $oDbProxy = levitarmouse\core\database\PDOProxy::getInstance($aDbConfig);
+        $return         = new stdClass();
+        $return->time   = $time;
+        $return->encryt = $encryption;
+        $return->decryt = $string2;
 
-        $oDb = new levitarmouse\core\database\Database($oDbProxy);
-
-//        if ($token) {
-//            // validate and update token
-//        } else {
-//            // generate and store token
-//        }
-
-        session_start();
-
-        $aRs = $oDb->select("SELECT * FROM prp_user where user_name like '%GAB%'");
-
-        $oDTO = new UserDTO($oDb, $sUser);
-        if ($sUser == '' || $sSessionId == '') {
-            $oDTO->sUserName = 'guest';
-        }
-
-        $oUser = new User($oDTO);
-
-        if ($sSessionId == '') {
-            $httpSessionId = md5(mktime());
-        }
-        else {
-            $httpSessionId = $sSessionId;
-        }
-        $oDTO     = new SessionDTO($oDb, '', $oUser->userId, $httpSessionId, $_SERVER['REMOTE_ADDR']);
-        $oSession = new Session($oDTO);
-
-        $oResponse = new HelloReponse();
-
-        if (!$oSession->exists() && $oUser->exists()) {
-            $oSession->userId        = $oUser->userId;
-            $oSession->token         = md5(microtime());
-            $oSession->httpSessionId = $httpSessionId;
-            $oSession->ip            = $_SERVER['REMOTE_ADDR'];
-            $oSession->lastUpdate    = Config::SYSDATE_STRING;
-            $oSession->create();
-            $oResponse->message      = 'Bienvenido';
-        }
-        else {
-            $oResponse->message = 'otra vez sopa';
-        }
-
-        $oResponse->token     = $oSession->token;
-        $oResponse->sessionId = $oSession->httpSessionId;
-        return $oResponse;
+        return $return;
     }
 
     /**
      * login
      *
+     * @param string $token token
      * @param string $userName  User name
-     * @param string $passToken Pass token
+     * @param string $password password
      *
      * @return LoginReponse $oResponse
      */
-    public function login($userName, $passToken)
+    public function login($token, $userName, $password)
     {
-
-        $oHelloResponse = new LoginReponse();
-
-        $userName = utf8_decode($userName);
-
-        // separador = d6985f552e1f38bc02a74d36c9719de6
-        $separador  = Config::SEPARADOR;
-        $aPassToken = explode($separador, $passToken);
-
-        $sSessionId = $aPassToken[0];
-        $sUserPass  = $aPassToken[1];
-
         try {
-            if ($userName == '' || $sUserPass == '') {
+
+            if ($userName == '' || $password == '') {
                 throw new Exception('NICK_NAME_OR_PASSTOKEN_EMPTY');
             }
 
-            $oDb = new DB();
-
-            $oUserDTO = new UserDTO($oDb, $userName, $sUserPass);
-            $oUser    = new User($oUserDTO);
+            $oUserDTO = new levitarmouse\prp\entity\dto\UserDTO($this->oDb, $this->oLogger, null, $userName, $password);
+            $oUser    = new \levitarmouse\prp\entity\User($oUserDTO);
 
             if ($oUser->exists()) {
-                $sNewToken = md5(rand(1000, 9999) . rand(1000, 9999) . rand(1000, 9999));
-                $sNewToken.= $separador . $oUser->userId;
-                $sNewToken.= $separador . $sSessionId;
-                $oDTO      = new SessionDTO($oDb, $sSessionId, 0, $sSessionId, $_SERVER['REMOTE_ADDR']);
-                $oSession  = new Session($oDTO);
 
-                if ($oSession->exists()) {
-                    $oSession->userId = $oUser->userId;
-                    $oSession->token  = $sNewToken;
-                    $oSession->modify();
+                $sessionDto = new \levitarmouse\prp\entity\dto\SessionDTO($this->oDb, $this->oLogger, $token);
+                $oSession   = new levitarmouse\prp\entity\Session($sessionDto);
 
-                    $oResponse->hello = utf8_encode('Hello ' . $oUser->realName . '!');
-                    $oResponse->token = $sNewToken;
+                $bSessionExists   = $oSession->exists();
+                $bSessionIsIdle   = $oSession->isIdle();
+                $bSessionIsActive = $oSession->isActive();
+
+                $message = '';
+                if ($bSessionExists) {
+
+                    if ($bSessionIsIdle) {
+                        $oSessoin->session_start = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
+                        $oSessoin->last_update   = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
+                        $oSession->user_id       = $oUser->user_id;
+                        $oSession->status        = levitarmouse\prp\entity\Session::STATUS_ACTIVE;
+                        $oSession->modify();
+
+                        $message                 = 'Hello ' . $oUser->real_name;
+                    }
+                    else if ($bSessionIsActive) {
+                        $oSessoin->last_update = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
+                        $oSession->modify();
+                        $message               = 'Hello ' . $oUser->real_name;
+                    }
+                    else {
+                        $message = 'Goodbye';
+                    }
                 }
                 else {
-                    $oResponse->hello = 'Goodbye';
+                    $message = 'Goodbye';
                 }
             }
             else {
-                $oResponse->hello = 'Goodbye';
+                $message = 'Goodbye';
             }
         }
         catch (Exception $e) {
-            $oResponse->hello = $e->getMessage();
-            $oResponse->token = '';
+            $message = $e->getMessage();
         }
 
-        return $oResponse;
+        $oLoginResponse = new LoginReponse();
+        $oLoginResponse->message = utf8_encode($message);
+        return $oLoginResponse;
+    }
+
+    /**
+     * logout
+     *
+     * @param string $token token
+     *
+     * @return LoginReponse $oResponse
+     */
+    public function logout($token)
+    {
+        if (!$token) {
+            return;
+        }
+
+        try {
+            $sessionDto = new \levitarmouse\prp\entity\dto\SessionDTO($this->oDb, $this->oLogger, $token);
+            $oSession   = new levitarmouse\prp\entity\Session($sessionDto);
+
+            if ($oSession->exists()) {
+                $oSessoin->last_update = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
+                $oSession->status      = levitarmouse\prp\entity\Session::STATUS_INACTIVE;
+                $oSession->modify();
+
+                $message = 'Goodbye';
+            }
+            else {
+                $message = '';
+            }
+        }
+        catch (Exception $e) {
+            $message = $e->getMessage();
+        }
+
+        $oLoginResponse = new LoginReponse();
+        $oLoginResponse->message = utf8_encode($message);
+        return $oLoginResponse;
     }
 
     /**
@@ -234,6 +251,18 @@ class prpWS
         }
 
         return $sMessage;
+    }
+
+    /**
+     * MD5
+     *
+     * @param string $string string
+     *
+     * @return string
+     */
+    public function md5($string)
+    {
+        return md5($string);
     }
 
 }

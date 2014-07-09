@@ -5,18 +5,22 @@
  * PHP version 5
  */
 
+namespace levitarmouse\prp\entity;
+
 /**
  * Subscriber class
  */
-class Session extends levitarmouse\orm\EntityModel
+class Session extends \levitarmouse\orm\EntityModel
 {
-    
-    
-    public function __construct(SessionDTO $dto)
+    const STATUS_IDLE = null;
+    const STATUS_ACTIVE = 'ACTIVE';
+    const STATUS_INACTIVE = 'INACTIVE';
+
+    public function __construct(dto\SessionDTO $dto)
     {
         parent::__construct($dto);
 
-        $sessionId = $dto->sessionId;
+        $this->session_id = $dto->sessionId;
 //        $iUserId = $dto->iUserId;
 //        $sIp     = $dto->sIp;
 //        $token   = $dto->
@@ -25,14 +29,14 @@ class Session extends levitarmouse\orm\EntityModel
 //        $this->oMapper = SessionMapper::getInstance($this->oDb);
 
         try {
-            if ($sessionId) {
+            if ($this->session_id) {
 
 //                $filterDTO = new \levitarmouse\orm\dto\GetByFilterDTO();
 
 //                $filterDTO->session_id = $sessionId;
 
-                $this->getBySessionId($sessionId);
-                
+                $this->getBySessionId($this->session_id);
+
 //                $this->getByFilter($filterDTO);
 
             }
@@ -50,13 +54,44 @@ class Session extends levitarmouse\orm\EntityModel
             $msg = $e->getMessage();
         }
     }
-    
+
     public function getBySessionId($sessionId)
     {
         $result = $this->oMapper->getBySessionId($sessionId);
-        
-        $this->fill($result[0]);
-        
+
+        $this->fill($result);
+
         return;
+    }
+
+    public function update()
+    {
+        $this->last_update = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
+        $result = $this->modify();
+        return;
+    }
+
+    public function isActive()
+    {
+        $bActive = null;
+        $status = $this->status;
+        if ($status == self::STATUS_ACTIVE) {
+            $bActive = true;
+        } else {
+            $bActive = false;
+        }
+        return $bActive;
+    }
+
+    public function isIdle()
+    {
+        $bIdle = null;
+        $status = $this->status;
+        if ($status == self::STATUS_IDLE) {
+            $bIdle = true;
+        } else {
+            $bIdle = false;
+        }
+        return $bIdle;
     }
 }

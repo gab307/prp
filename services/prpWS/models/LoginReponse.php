@@ -12,8 +12,6 @@
  */
 class LoginReponse
 {
-    public $hello;
+    public $message;
     public $token;
 }
-
-?>

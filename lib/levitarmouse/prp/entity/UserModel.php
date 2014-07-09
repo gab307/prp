@@ -5,14 +5,16 @@
  * and open the template in the editor.
  */
 
+namespace levitarmouse\prp\entity;
+
 /**
  * Description of SessionModel
  *
  * @author gprieto
  */
-class SessionModel extends levitarmouse\orm\MapperEntityModel
+class UserModel extends \levitarmouse\orm\MapperEntityModel
 {
-    public function getBySessionId($sessionId)
+    public function getByUsernameAndPassword($userName, $hashedPassword)
     {
         $sSchema      = $this->getSchema();
         $sMainTable   = $this->getTableName();
@@ -54,8 +56,11 @@ class SessionModel extends levitarmouse\orm\MapperEntityModel
             }
 
             $sWhere  = ' WHERE 1 = 1';
-            $sWhere .= " AND session_id = :session_id ";
-            $aBnd['session_id'] = $sessionId;
+            $sWhere .= " AND user_name = :user_name ";
+            $sWhere .= " AND password = :password ";
+
+            $aBnd['user_name'] = $userName;
+            $aBnd['password'] = $hashedPassword;
 
             $sSql .= $sFrom . $sWhere;
 
@@ -69,8 +74,8 @@ class SessionModel extends levitarmouse\orm\MapperEntityModel
 
             //            $this->oLogger->logDbChanges("result: ".serialize($aResult));
 
-            if (is_array($aResult)) {
-                return $aResult;
+            if (is_array($aResult) && count($aResult) > 0) {
+                return $aResult[0];
             }
         }
         return array();

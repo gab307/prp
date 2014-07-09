@@ -22,8 +22,8 @@ use levitarmouse\orm\interfaces\CollectionInterface;
 use levitarmouse\orm\interfaces\EntityInterface;
 use levitarmouse\orm\Mapper as Mapper;
 
-define(MYSQL, 1);
-define(ORACLE, 0);
+define('MYSQL', 1);
+define('ORACLE', 0);
 
 /**
  * MapperEntityModel class
@@ -48,6 +48,7 @@ implements EntityInterface,
     protected $aFieldMappingRead             = array();
     protected $aFieldMappingWrite            = array();
     protected $aFieldMappingUniqueKeyAttribs = array();
+    protected $aFieldMappingPrimaryKeyAttribs = array();
     //protected $sOrganizationIdFieldName      = '';
     protected $iCountFileds;
     protected $sEntityDescriptionFileName;
@@ -109,7 +110,7 @@ implements EntityInterface,
             }
             if ($section == 'primary_key') {
                 foreach ($aParameters as $index => $value) {
-                    $this->aFieldMappingUniqueKeyAttribs[$index] = $value;
+                    $this->aFieldMappingPrimaryKeyAttribs[$index] = $value;
                     $this->primary_key = $value;
                 }
             }
@@ -153,7 +154,8 @@ implements EntityInterface,
 
     public function getPrimaryKey()
     {
-        return (isset($this->primary_key)) ? $this->primary_key : '';
+//        return (isset($this->primary_key)) ? $this->primary_key : '';
+        return (isset($this->aFieldMappingPrimaryKeyAttribs)) ? $this->aFieldMappingPrimaryKeyAttribs : array();
     }
 
     public function getSchema()
@@ -191,6 +193,15 @@ implements EntityInterface,
             $sAttrib = $aCopy[$this->primary_key];
         }
         return $sAttrib;
+    }
+
+    public function getAttribByFieldName($fieldName)
+    {
+        $aFieldMapping = array_flip($this->aFieldMapping);
+        $return = new EntityAttribDTO();
+        $return->attribName = $aFieldMapping[$fieldName];
+
+        return $return;
     }
 
     public function getNextId()
@@ -482,8 +493,8 @@ implements EntityInterface,
 
     public function modify($aValues, $aWhere)
     {
-        $sLogValues = $sLogWhere  = '';
-        $sMainTable = $this->getDbTableName();
+        $sLogValues = $sLogWhere  = $sSetters = '';
+        $sMainTable = $this->getTableName();
         if (count($aWhere) > 0 && count($aValues) > 0 && $sMainTable != '') {
 
             $bFirst = true;
@@ -501,7 +512,11 @@ implements EntityInterface,
                 }
 
                 if ($value === Mapper::SYSDATE_STRING || $value === Mapper::SQL_SYSDATE_STRING) {
-                    $value = "SYSDATE";
+                    if (MYSQL) {
+                        $value = "NOW()";
+                    } else {
+                        $value = "SYSDATE";
+                    }
                     unset($aBnd[$field]);
                 }
                 elseif ($value === Mapper::ENABLED) {
@@ -556,7 +571,7 @@ implements EntityInterface,
             }
 
             // Logging
-            $this->oLogger->logDbChanges("update {$sMainTable} set {$sLogValues} where {$sLogWhere}", 'UPDATE');
+//            $this->oLogger->logDbChanges("update {$sMainTable} set {$sLogValues} where {$sLogWhere}", 'UPDATE');
 
             $sSql = "
                 UPDATE {$sMainTable}
