@@ -260,12 +260,7 @@ implements EntityInterface,
             $sWhere = " WHERE {$sIdFieldName} = :ID ";
 
             $aBnd = array('ID' => $id);
-            /*
-            if ($iControllerId != '') {
-                $aBnd['CONTROLLERID'] = $iControllerId;
-                $sWhere .= ' AND CONTROLLERID = :CONTROLLERID ';
-            }
-            */
+
             $sSql .= $sFrom . $sWhere;
 
             // Logging
@@ -361,12 +356,6 @@ implements EntityInterface,
                 }
                 $aBnd[$dbField] = $value;
             }
-
-
-            //            if ($iControllerId != '') {
-            //                $aBnd['CONTROLLERID'] = $iControllerId;
-            //                $sWhere .= ' AND CONTROLLERID = :CONTROLLERID ';
-            //            }
 
             $sSql .= $sFrom . $sWhere;
 

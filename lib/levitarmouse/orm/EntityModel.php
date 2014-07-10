@@ -24,8 +24,6 @@ use levitarmouse\orm\interfaces\CollectionInterface;
 use levitarmouse\orm\interfaces\EntityInterface;
 use stdClass;
 
-
-
 /**
  * EntityModel class
  *
@@ -49,10 +47,7 @@ implements EntityInterface, CollectionInterface
     const REMOVAL_OK       = 'REMOVAL_OK';     // Se eliminó en la DB
     const REMOVAL_FAILED   = 'REMOVAL_FAILED'; // Falló la eliminación en la DB
 
-    /** @var MapperEntityModel $oMapper */
     protected $oMapper;
-
-    //abstract function defineMapper();
 
     protected $hasDescriptor;
     protected $exists;
@@ -80,15 +75,10 @@ implements EntityInterface, CollectionInterface
 
         $sFileDescriptor = $this->getFileDescriptorByConvention();
 
-        //$modelName = get_class($this);
-        //if (class_exists($modelName)) {
         $oModelDto     = new ModelDTO($this->oDb, $this->oLogger, $sFileDescriptor);
-        //      $this->oMapper = new $modelName($oModelDto);
-        //  }
 
         $modelName = get_class($this) . 'Model';
         if (class_exists($modelName)) {
-            //$oModelDto     = new ModelDTO($oDB, $oLogger);
             $this->oMapper = new $modelName($oModelDto);
         } else {
             $this->oMapper = new MapperEntityModel($oModelDto);
@@ -144,14 +134,6 @@ implements EntityInterface, CollectionInterface
         $this->exists = false;
 
         if (is_array($aRsValues) && count($aRsValues) > 0) {
-            /* foreach ($aFieldMapping as $sAttrib => $sField)
-              {
-              if (isset($aRsValues[$sField]))
-              {
-              $this->aData[$sAttrib] = $aRsValues[$sField];
-              }
-              } */
-
             foreach ($aRsValues as $sField => $value) {
                 if (in_array($sField, $aFieldMapping)) {
                     $this->aData[array_search($sField, $aFieldMapping)] = $value;
@@ -289,27 +271,11 @@ implements EntityInterface, CollectionInterface
     }
 
     /**
-     * Now nothing, check getByExample
+     * GetByFilter
      *
-     * @return nothing
-     */
-//    public function getFiltered()
-//    {
-//        ;
-//    }
-
-    /**
-     * This method will return an array of ojects which matches the example's
-     * set attributes. It supports single value or multiple values for one attribute.
-     * The set attributes which are not in the corresponding ini file will not be considered.
-     *
-     * Ex.: $ex->username = array('aa','bb','cc');
-     *      $ex->lastname = 'pepe';
-     *      $mapperEntityModel->getByEcample($ex);
-     *      This example will bring every register which lastname is 'pepe' and it's username
-     *      is 'aa', 'bb' or 'cc'.
-     *
-     * @param GetByExampleDTO $exampleDTO example
+     * @param \levitarmouse\orm\dto\GetByFilterDTO $filterDTO
+     * @param \levitarmouse\orm\dto\OrderByDTO $orderDto
+     * @param \levitarmouse\orm\dto\LimitDTO $limitDto
      *
      * return array
      */
@@ -332,13 +298,11 @@ implements EntityInterface, CollectionInterface
         return $return;
     }
 
-        /* ********************************************
+    /* ********************************************
      * interfaces\CollectionInterface methods END
      * ******************************************** */
 
     /**
-     * Don´t know. Just filling comments.
-     *
      * @return nothing
      */
     public function loadRelated()
@@ -520,23 +484,7 @@ implements EntityInterface, CollectionInterface
     {
         return $this->aListChange;
     }
-    /*
-    protected function initAdditionalAttribs()
-    {
-        $aFields = $this->aAdditionalAttribs;
 
-        if (is_array($aFields) && count($aFields) > 0) {
-            foreach ($aFields as $sAttr => $aSource) {
-                $sFromTable   = $aSource['table'];
-                $sFromFields  = $aSource['field'];
-                $sWhereField  = $aSource['id'];
-                $sWhereValue  = $this->$sWhereField;
-                $value        = $this->oTvTopology->getField($sFromTable, $sFromFields, $sWhereField, $sWhereValue);
-                $this->$sAttr = $value;
-            }
-        }
-    }
-    */
     public function isBeingUsed($sField, $sValue, $bAutoExclude = true)
     {
         $id = $this->oMapper->getAttribAsUniqueKey();
