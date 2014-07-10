@@ -140,8 +140,8 @@ class prpWS
                 if ($bSessionExists) {
 
                     if ($bSessionIsIdle) {
-                        $oSessoin->session_start = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
-                        $oSessoin->last_update   = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
+                        $oSession->session_start = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
+                        $oSession->last_update   = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
                         $oSession->user_id       = $oUser->user_id;
                         $oSession->status        = levitarmouse\prp\entity\Session::STATUS_ACTIVE;
                         $oSession->modify();
@@ -149,7 +149,7 @@ class prpWS
                         $message                 = 'Hello ' . $oUser->real_name;
                     }
                     else if ($bSessionIsActive) {
-                        $oSessoin->last_update = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
+                        $oSession->last_update = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
                         $oSession->modify();
                         $message               = 'Hello ' . $oUser->real_name;
                     }
@@ -192,7 +192,7 @@ class prpWS
             $oSession   = new levitarmouse\prp\entity\Session($sessionDto);
 
             if ($oSession->exists()) {
-                $oSessoin->last_update = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
+                $oSession->last_update = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
                 $oSession->status      = levitarmouse\prp\entity\Session::STATUS_INACTIVE;
                 $oSession->modify();
 
