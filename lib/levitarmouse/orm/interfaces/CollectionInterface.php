@@ -43,4 +43,6 @@ interface CollectionInterface
     public function getByFilter(GetByFilterDTO $filterDto, OrderByDTO $orderDto = null, LimitDTO $limitDto = null);
 
 //    public function getByExample(GetByExampleDTO $exampleDTO);
+
+//    public function getNext();
 }

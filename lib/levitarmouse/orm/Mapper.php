@@ -440,6 +440,63 @@ EOQ;
         return $aResult;
     }
 
+    /**
+     *
+     * @param type $sSql
+     * @param type $aBnd
+     *
+     * @return type
+     */
+    public function prepareAndSelect($query, $params)
+    {
+        try {
+            if (!$this->oDb) {
+                throw new Exception(__CLASS__.' DbConection not present');
+            }
+            $sSql = <<<QUERY
+                SELECT t1.*
+                  FROM ( {$query} ) t1
+                 WHERE 1 = 1
+QUERY;
+
+            if (is_a($params, 'stdClass') ) {
+
+                $sWhere = '';
+                foreach ($params as $key => $value) {
+                    if (strlen($value)) {
+
+                        $bLike = strlen(strstr($value, '{{LIKE}}')) > 1;
+
+                        if ($bLike) {
+                            $sWhere    .= " AND {$key} LIKE :{$key} ";
+                        } else {
+                            $sWhere    .= " AND {$key} = :{$key} ";
+                        }
+                        $aBnd[$key] = $value;
+                    }
+                }
+            }
+
+            $sSql = $sSql . $sWhere;
+
+            $aResult = null;
+            $iTimeStart = (microtime(true));
+            $aResult = $this->oDb->selectWithBindings($sSql, $aBnd);
+            $iTimeEnd   = (microtime(true));
+            $fTime = vsprintf('%.3f', $iTimeEnd - $iTimeStart);
+
+            self::$iCountSelect ++;
+            self::$iCountAction ++;
+            self::$fTime += $fTime;
+
+        }
+        catch (Exception $e) {
+            $this->oLogger->logDebug($e->getMessage());
+            $aResult = $e->getMessage();
+        }
+        return $aResult;
+    }
+
     protected function logTrace()
     {
         if ($this->oLogger) {

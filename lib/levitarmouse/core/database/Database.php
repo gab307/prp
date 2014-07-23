@@ -23,7 +23,17 @@ class Database
     public function selectWithBindings($sSql, $aBindings)
     {
         foreach ($aBindings as $key => $value) {
-            $sSql = str_replace(':'.$key, "'".$value."'", $sSql);
+            $bLike = strlen(strstr($value, '{{LIKE}}')) > 1;
+            if ($bLike) {
+//                $bLike = true;
+                $value = str_replace('{{LIKE}}', '%', $value);
+            }
+
+//            if ($bLike) {
+//                $sSql = str_replace('= :'.$key, "LIKE '".$value."'", $sSql);
+//            } else {
+                $sSql = str_replace(':'.$key, "'".$value."'", $sSql);
+//            }
         }
 
         $aReturn = $this->oDb->select($sSql);
@@ -72,5 +82,3 @@ class Database
         return $aReturn;
     }
 }
-
-?>

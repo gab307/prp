@@ -1,4 +1,19 @@
 <?php
+
+use \levitarmouse\core\database\Database;
+use \levitarmouse\core\database\PDOProxy;
+use \levitarmouse\core\encryption\Encryption;
+use \levitarmouse\core\log\Logger;
+use \levitarmouse\orm\dto\GetPurchaseDTO;
+use \levitarmouse\orm\Mapper;
+use \levitarmouse\prp\entity\dto\SessionDTO;
+use \levitarmouse\prp\entity\dto\UserDTO;
+use \levitarmouse\prp\entity\Expenses;
+use \levitarmouse\prp\entity\Session as Session2;
+use \levitarmouse\prp\entity\User;
+use \levitarmouse\prp\webservice\GetExpenseRequest;
+use \levitarmouse\prp\webservice\GetExpenseResponse;
+use \levitarmouse\util\date\Date;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -9,7 +24,7 @@
  *
  * @author gabriel
  */
-class prpWS
+class PRP
 {
     protected $oDb;
     protected $oLogger;
@@ -24,10 +39,10 @@ class prpWS
             'db_options'    => '',
             'db_attributes' => '',
         );
-        $oProxy    = \levitarmouse\core\database\PDOProxy::getInstance($dbConfig);
-        $this->oDb = new levitarmouse\core\database\Database($oProxy);
+        $oProxy    = PDOProxy::getInstance($dbConfig);
+        $this->oDb = new Database($oProxy);
 
-        $this->oLogger = new \levitarmouse\core\log\Logger('PRP', 'logs/messages.log');
+        $this->oLogger = new Logger('PRP', 'logs/messages.log');
     }
 
     /**
@@ -37,7 +52,7 @@ class prpWS
      */
     public function getPHPDate()
     {
-        $date = new \levitarmouse\util\date\Date();
+        $date = new Date();
 
         return $date->getPHPDate();
     }
@@ -61,8 +76,8 @@ class prpWS
             $bToken    = false;
         }
 
-        $sessionDto = new \levitarmouse\prp\entity\dto\SessionDTO($this->oDb, $this->oLogger, $sessionId);
-        $oSession   = new levitarmouse\prp\entity\Session($sessionDto);
+        $sessionDto = new SessionDTO($this->oDb, $this->oLogger, $sessionId);
+        $oSession   = new Session2($sessionDto);
 
         if ($oSession->exists()) {
             $oSession->update();
@@ -77,7 +92,7 @@ class prpWS
             }
         }
 
-        $return            = new stdClass();
+        $return            = new \stdClass();
         $return->sessionId = $sessionId;
 
         return $return;
@@ -93,13 +108,13 @@ class prpWS
     public function encryptionTest($string)
     {
         $start      = microtime(true);
-        $encryption = \levitarmouse\core\encryption\Encryption::encrypt($string, "123");
+        $encryption = Encryption::encrypt($string, "123");
         //    $enc = new Illuminate\Encryption\Encrypter("123");
-        $string2    = \levitarmouse\core\encryption\Encryption::decrypt($encryption, "123");
+        $string2    = Encryption::decrypt($encryption, "123");
         //    $encryption = $enc->decrypt($encryption);
         $time       = microtime(true) - $start;
 
-        $return         = new stdClass();
+        $return         = new \stdClass();
         $return->time   = $time;
         $return->encryt = $encryption;
         $return->decryt = $string2;
@@ -114,7 +129,7 @@ class prpWS
      * @param string $userName  User name
      * @param string $password password
      *
-     * @return LoginReponse $oResponse
+     * @return \LoginReponse $oResponse
      */
     public function login($token, $userName, $password)
     {
@@ -124,13 +139,13 @@ class prpWS
                 throw new Exception('NICK_NAME_OR_PASSTOKEN_EMPTY');
             }
 
-            $oUserDTO = new levitarmouse\prp\entity\dto\UserDTO($this->oDb, $this->oLogger, null, $userName, $password);
-            $oUser    = new \levitarmouse\prp\entity\User($oUserDTO);
+            $oUserDTO = new UserDTO($this->oDb, $this->oLogger, null, $userName, $password);
+            $oUser    = new User($oUserDTO);
 
             if ($oUser->exists()) {
 
-                $sessionDto = new \levitarmouse\prp\entity\dto\SessionDTO($this->oDb, $this->oLogger, $token);
-                $oSession   = new levitarmouse\prp\entity\Session($sessionDto);
+                $sessionDto = new SessionDTO($this->oDb, $this->oLogger, $token);
+                $oSession   = new Session2($sessionDto);
 
                 $bSessionExists   = $oSession->exists();
                 $bSessionIsIdle   = $oSession->isIdle();
@@ -140,16 +155,16 @@ class prpWS
                 if ($bSessionExists) {
 
                     if ($bSessionIsIdle) {
-                        $oSession->session_start = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
-                        $oSession->last_update   = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
+                        $oSession->session_start = Mapper::SQL_SYSDATE_STRING;
+                        $oSession->last_update   = Mapper::SQL_SYSDATE_STRING;
                         $oSession->user_id       = $oUser->user_id;
-                        $oSession->status        = levitarmouse\prp\entity\Session::STATUS_ACTIVE;
+                        $oSession->status        = Session2::STATUS_ACTIVE;
                         $oSession->modify();
 
                         $message                 = 'Hello ' . $oUser->real_name;
                     }
                     else if ($bSessionIsActive) {
-                        $oSession->last_update = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
+                        $oSession->last_update = Mapper::SQL_SYSDATE_STRING;
                         $oSession->modify();
                         $message               = 'Hello ' . $oUser->real_name;
                     }
@@ -169,7 +184,7 @@ class prpWS
             $message = $e->getMessage();
         }
 
-        $oLoginResponse = new LoginReponse();
+        $oLoginResponse = new \LoginReponse();
         $oLoginResponse->message = utf8_encode($message);
         return $oLoginResponse;
     }
@@ -179,7 +194,7 @@ class prpWS
      *
      * @param string $token token
      *
-     * @return LoginReponse $oResponse
+     * @return \LoginReponse $oResponse
      */
     public function logout($token)
     {
@@ -188,12 +203,12 @@ class prpWS
         }
 
         try {
-            $sessionDto = new \levitarmouse\prp\entity\dto\SessionDTO($this->oDb, $this->oLogger, $token);
-            $oSession   = new levitarmouse\prp\entity\Session($sessionDto);
+            $sessionDto = new SessionDTO($this->oDb, $this->oLogger, $token);
+            $oSession   = new Session2($sessionDto);
 
             if ($oSession->exists()) {
-                $oSession->last_update = \levitarmouse\orm\Mapper::SQL_SYSDATE_STRING;
-                $oSession->status      = levitarmouse\prp\entity\Session::STATUS_INACTIVE;
+                $oSession->last_update = Mapper::SQL_SYSDATE_STRING;
+                $oSession->status      = Session2::STATUS_INACTIVE;
                 $oSession->modify();
 
                 $message = 'Goodbye';
@@ -222,9 +237,32 @@ class prpWS
             $message = $e->getMessage();
         }
 
-        $oLoginResponse = new LoginReponse();
+        $oLoginResponse = new \LoginReponse();
         $oLoginResponse->message = utf8_encode($message);
         return $oLoginResponse;
+    }
+
+    /**
+     * GetExpense
+     *
+     * @param GetExpenseRequest $request
+     *
+     * @return GetExpenseResponse
+     */
+
+    public function getExpense($request)
+    {
+        $dto = new GetPurchaseDTO($this->oDb, $this->oLogger);
+        $expense = new Expenses($dto);
+        $expense->getExpenses($request);
+
+        $response = new GetExpenseResponse();
+        $return = $expense->getNext();
+        if ($return) {
+            $response->fill($return->getAttribs());
+        }
+
+        return $response;
     }
 
     /**
@@ -236,38 +274,38 @@ class prpWS
      *
      * @return string identificador de error
      */
-    public function expense($userName, $token, $xml)
-    {
-        $userName       = $userName;
-        $aToken         = explode(Config::SEPARADOR, $token);
-        $sOpToken       = $aToken[0];
-        $iUserId        = $aToken[1];
-        $sHttpSessionId = $aToken[2];
-        $remoteIp       = $_SERVER['REMOTE_ADDR'];
-
-        $oDb = new DB();
-
-        $oSessionDTO = new SessionDTO($oDb, '', $iUserId, $sHttpSessionId, $remoteIp);
-        $oSession    = new Session($oSessionDTO);
-
-        if ($oSession->exists()) {
-            $oSession->lastUpdate = Config::SQL_SYSDATE_STRING;
-
-            $oDTO = new OperationRouterDTO($oDb, $oSession, $xml);
-
-            $oRouter = new OperationRouter($oDTO);
-
-            $sMessage = $oRouter->handle();
-
-
-            $oSession->modify();
-        }
-        else {
-            return 'Debes ingresar primero para poder operar';
-        }
-
-        return $sMessage;
-    }
+//    public function expense($userName, $token, $xml)
+//    {
+//        $userName       = $userName;
+//        $aToken         = explode(Config::SEPARADOR, $token);
+//        $sOpToken       = $aToken[0];
+//        $iUserId        = $aToken[1];
+//        $sHttpSessionId = $aToken[2];
+//        $remoteIp       = $_SERVER['REMOTE_ADDR'];
+//
+//        $oDb = new DB();
+//
+//        $oSessionDTO = new SessionDTO($oDb, '', $iUserId, $sHttpSessionId, $remoteIp);
+//        $oSession    = new Session($oSessionDTO);
+//
+//        if ($oSession->exists()) {
+//            $oSession->lastUpdate = Config::SQL_SYSDATE_STRING;
+//
+//            $oDTO = new OperationRouterDTO($oDb, $oSession, $xml);
+//
+//            $oRouter = new OperationRouter($oDTO);
+//
+//            $sMessage = $oRouter->handle();
+//
+//
+//            $oSession->modify();
+//        }
+//        else {
+//            return 'Debes ingresar primero para poder operar';
+//        }
+//
+//        return $sMessage;
+//    }
 
     /**
      * MD5

@@ -27,6 +27,8 @@ use stdClass;
 /**
  * EntityModel class
  *
+ * @param MapperEntityModel $oMapper Mapper
+ *
  * @package   ORM
  * @author    Gabriel Prieto <gab307@gmail.com>
  * @copyright 2012 LM
@@ -60,11 +62,16 @@ implements EntityInterface, CollectionInterface
     public $oLogger;
     public $oDb;
 
+    protected $aCollection;
+    protected $collectionIndex;
+
     protected $_dto;
 
     function __construct(EntityDTO $dto)
     {
         $this->_dto = $dto;
+
+        $this->aCollection = array();
 
         if ($dto->oDB) {
             $this->oDb = $dto->oDB;
@@ -257,17 +264,17 @@ implements EntityInterface, CollectionInterface
 
         $className = get_class($this);
 
-        $return = array();
+//        $return = array();
         $dto = new EntityDTO($this->oDb, $this->oLogger);
         foreach ($resultSet as $key => $row) {
             $obj = new $className($dto);
             $obj->fillByObject($row);
 
-            $return[] = $obj;
+            $this->aCollection[] = $obj;
         }
         unset($resultSet);
 
-        return $return;
+        return $this->aCollection;
     }
 
     /**
@@ -285,15 +292,23 @@ implements EntityInterface, CollectionInterface
 
         $className = get_class($this);
 
-        $return = array();
+//        $return = array();
         $dto = new EntityDTO($this->oDb, $this->oLogger);
         foreach ($resultSet as $key => $row) {
             $obj = new $className($dto);
             $obj->fill($row);
 
-            $return[] = $obj;
+            $this->aCollection[] = $obj;
         }
         unset($resultSet);
+
+        return $this->aCollection;
+    }
+
+    public function getNext()
+    {
+        $index = ($this->collectionIndex == 0 ) ? 0 : $this->collectionIndex + 1;
+        $return = $this->aCollection[$index];
 
         return $return;
     }
