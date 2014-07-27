@@ -27,12 +27,15 @@ class ExpenseModel extends MapperEntityModel
         $query = <<<QUERY
             SELECT
             from_unixtime(pur.date) date,
-            pur.purchase_id, pur.description,
+            pur.purchase_id,
+            pur.description,
+            pay.amount,
             users.user_name,
             str.store_name,
             ent.entity_name,
             cat.category_name
              FROM prp.purchases  pur
+            JOIN prp.payment pay ON pay.purchase_id = pur.purchase_id
             JOIN prp.users users ON users.user_id = pur.user_id
             JOIN prp.stores str ON str.store_id = pur.store_id
             JOIN prp.entity ent ON ent.entity_id = pur.entity_id

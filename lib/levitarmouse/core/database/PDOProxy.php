@@ -21,7 +21,11 @@ class PDOProxy
         }
         $dsn = $dsn . implode(';', $dsns);
 
-        self::$_link = new \PDO($dsn, $user, $password);
+        $opciones = array(
+            \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+        );
+
+        self::$_link = new \PDO($dsn, $user, $password, $opciones);
 
 //        foreach ($attributes as $k => $v) {
 //            $link->setAttribute(constant("PDO::{$k}")

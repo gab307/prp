@@ -12,21 +12,20 @@ namespace levitarmouse\prp\webservice;
  *
  * @author gprieto
  *
- * @pw_complex ExpenseArray $expenses Expenses
- *
+ * @pw_element ExpensesGroup $expensesGroup expensesGroup
  * @pw_complex GetExpenseResponse
  */
 class GetExpenseResponse
 {
-    public $expenses;
+    public $expensesGroup;
 
     public function __construct()
     {
-        $this->expenses = array();
+        $this->expensesGroup = new ExpensesGroup();
     }
 
     public function addExpense($expense)
     {
-        $this->expenses[] = $expense;
+        $this->expensesGroup->addExpense($expense);
     }
 }

@@ -21,6 +21,7 @@ $soap           = PhpWsdl::CreateInstance(
         '../../lib/levitarmouse/prp/webservice/GetExpenseRequest.php',
         '../../lib/levitarmouse/prp/webservice/GetExpenseResponse.php',
         '../../lib/levitarmouse/prp/webservice/Expense.php',
+        '../../lib/levitarmouse/prp/webservice/ExpensesGroup.php',
         ),
         null,                     // The name of the class that serves the webservice will be determined by PhpWsdl
         null,                     // This demo contains all method definitions in comments

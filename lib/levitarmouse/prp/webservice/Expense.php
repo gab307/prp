@@ -12,6 +12,7 @@ namespace levitarmouse\prp\webservice;
  *
  * @author gprieto
  *
+ * @pw_element string $amount Amount
  * @pw_element string $user_name User Name
  * @pw_element string $category_name Category Name
  * @pw_element string $entity_name Entity Name
@@ -22,6 +23,7 @@ namespace levitarmouse\prp\webservice;
  */
 class Expense extends Entity
 {
+    public $amount;
     public $user_name;
     public $category_name;
     public $entity_name;
