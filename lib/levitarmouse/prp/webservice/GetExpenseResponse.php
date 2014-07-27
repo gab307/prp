@@ -12,20 +12,21 @@ namespace levitarmouse\prp\webservice;
  *
  * @author gprieto
  *
- * @pw_element string $user_name User Name
- * @pw_element string $category_name Category Name
- * @pw_element string $entity_name Entity Name
- * @pw_element string $store_name Store Name
- * @pw_element string $date Date of purchase
- * @pw_element string $description Part of purchase description
+ * @pw_complex ExpenseArray $expenses Expenses
+ *
  * @pw_complex GetExpenseResponse
  */
-class GetExpenseResponse extends Response
+class GetExpenseResponse
 {
-    public $user_name;
-    public $category_name;
-    public $entity_name;
-    public $store_name;
-    public $date;
-    public $description;
+    public $expenses;
+
+    public function __construct()
+    {
+        $this->expenses = array();
+    }
+
+    public function addExpense($expense)
+    {
+        $this->expenses[] = $expense;
+    }
 }

@@ -8,7 +8,7 @@ use \levitarmouse\orm\dto\GetPurchaseDTO;
 use \levitarmouse\orm\Mapper;
 use \levitarmouse\prp\entity\dto\SessionDTO;
 use \levitarmouse\prp\entity\dto\UserDTO;
-use \levitarmouse\prp\entity\Expenses;
+use \levitarmouse\prp\entity\Expense;
 use \levitarmouse\prp\entity\Session as Session2;
 use \levitarmouse\prp\entity\User;
 use \levitarmouse\prp\webservice\GetExpenseRequest;
@@ -253,13 +253,20 @@ class PRP
     public function getExpense($request)
     {
         $dto = new GetPurchaseDTO($this->oDb, $this->oLogger);
-        $expense = new Expenses($dto);
-        $expense->getExpenses($request);
+        $expenses = new Expense($dto);
+        $expenses->getExpenses($request);
 
         $response = new GetExpenseResponse();
-        $return = $expense->getNext();
-        if ($return) {
-            $response->fill($return->getAttribs());
+
+//        foreach ($expenses as $key => $value) {
+//            $response->addExpense($value);
+//        }
+
+        while ($return = $expenses->getNext() ) {
+//            if ($return) {
+            $expense = new levitarmouse\prp\webservice\Expense($return->getAttribs());
+                $response->addExpense($expense);
+//            }
         }
 
         return $response;

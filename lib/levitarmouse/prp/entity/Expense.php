@@ -8,13 +8,13 @@
 namespace levitarmouse\prp\entity;
 
 /**
- * Description of Expenses
+ * Description of Expense
  *
- * @param ExpensesModel $oMapper Mapper
+ * @param ExpenseModel $oMapper Mapper
  *
  * @author gprieto
  */
-class Expenses extends \levitarmouse\orm\EntityModel
+class Expense extends \levitarmouse\orm\EntityModel
 {
 //    protected $aExpenses;
 
@@ -30,7 +30,7 @@ class Expenses extends \levitarmouse\orm\EntityModel
 
         if ($result) {
             foreach ($result as $key => $value) {
-                $obj = new Expenses(new \levitarmouse\orm\dto\EntityDTO());
+                $obj = new Expense(new \levitarmouse\orm\dto\EntityDTO());
                 $obj->fill($value);
                 $this->aCollection[] = $obj;
             }

@@ -71,23 +71,29 @@
         <s:annotation>
           <s:documentation>Description of GetExpenseResponse</s:documentation>
         </s:annotation>
+        <s:sequence></s:sequence>
+      </s:complexType>
+      <s:complexType name="Expense">
+        <s:annotation>
+          <s:documentation>Description of Expense</s:documentation>
+        </s:annotation>
         <s:sequence>
-          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="user" type="s:string">
+          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="user_name" type="s:string">
             <s:annotation>
               <s:documentation>User Name</s:documentation>
             </s:annotation>
           </s:element>
-          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="category" type="s:string">
+          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="category_name" type="s:string">
             <s:annotation>
               <s:documentation>Category Name</s:documentation>
             </s:annotation>
           </s:element>
-          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="entity" type="s:string">
+          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="entity_name" type="s:string">
             <s:annotation>
               <s:documentation>Entity Name</s:documentation>
             </s:annotation>
           </s:element>
-          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="store" type="s:string">
+          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="store_name" type="s:string">
             <s:annotation>
               <s:documentation>Store Name</s:documentation>
             </s:annotation>
@@ -318,11 +324,11 @@
    <soapenv:Body>
       <prp:getExpense soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><request xsi:type="prp:GetExpenseRequest">
             <user_name xsi:type="xsd:string">gab</user_name>
-            <category_name xsi:type="xsd:string"></category_name>
-            <entity_name xsi:type="xsd:string"></entity_name>
-            <store_name xsi:type="xsd:string"></store_name>
-            <date xsi:type="xsd:string"></date>
-            <description xsi:type="xsd:string"></description>
+            <category_name xsi:type="xsd:string"/>
+            <entity_name xsi:type="xsd:string"/>
+            <store_name xsi:type="xsd:string"/>
+            <date xsi:type="xsd:string"/>
+            <description xsi:type="xsd:string"/>
          </request>
       </prp:getExpense>
    </soapenv:Body>

@@ -72,6 +72,7 @@ implements EntityInterface, CollectionInterface
         $this->_dto = $dto;
 
         $this->aCollection = array();
+        $this->collectionIndex = 0;
 
         if ($dto->oDB) {
             $this->oDb = $dto->oDB;
@@ -307,10 +308,20 @@ implements EntityInterface, CollectionInterface
 
     public function getNext()
     {
-        $index = ($this->collectionIndex == 0 ) ? 0 : $this->collectionIndex + 1;
-        $return = $this->aCollection[$index];
+        while ($this->collectionIndex < count($this->aCollection)) {
+//            if ($this->collectionIndex == 0) {
+//                $index = 0;
+//                $this->collectionIndex ++;
+//            } else {
+                $index = $this->collectionIndex;
+                $this->collectionIndex ++;
+//            }
+//            $index = ($this->collectionIndex == 0 ) ? 0 : $this->collectionIndex + 1;
+            $return = $this->aCollection[$index];
 
-        return $return;
+            return $return;
+        }
+        return false;
     }
 
     /* ********************************************

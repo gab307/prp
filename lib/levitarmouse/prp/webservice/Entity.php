@@ -12,8 +12,15 @@ namespace levitarmouse\prp\webservice;
  *
  * @author gprieto
  */
-class Response
+class Entity
 {
+    public function __construct($values)
+    {
+        if ($values) {
+            $this->fill($values);
+        }
+    }
+
     public function fill($item)
     {
         if (is_array($item)) {

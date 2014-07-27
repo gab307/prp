@@ -15,7 +15,7 @@ use \levitarmouse\orm\MapperEntityModel;
  *
  * @author gprieto
  */
-class ExpensesModel extends MapperEntityModel
+class ExpenseModel extends MapperEntityModel
 {
     public function __construct(ModelDTO $dto)
     {
