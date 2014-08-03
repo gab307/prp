@@ -404,30 +404,7 @@ implements EntityInterface,
                     }
                 }
 
-                if ($value === Mapper::SYSDATE_STRING ||
-                    $value === Mapper::SQL_SYSDATE_STRING) {
-                    $value = "SYSDATE";
-                }
-                elseif ($value === Mapper::ENABLED) {
-                    $value = "0";
-                }
-                elseif ($value === Mapper::DISABLED) {
-                    $value = "1";
-                }
-                elseif ($value === Mapper::EMPTY_STRING ||
-                    $value === Mapper::SQL_EMPTY_STRING) {
-                    $value = "''";
-                }
-                elseif ($value === Mapper::NULL_STRING ||
-                    $value === Mapper::SQL_NULL_STRING) {
-                    $value = "null";
-                }
-                elseif ($value === '') {
-                    $value = "''";
-                }
-                elseif ($value === null) {
-                    $value = '';
-                }
+                $value = $this->_replaceConstant($value);
 
                 $sFields .= (!$bFirst) ? ', ' . $field : $field . '';
 
@@ -467,14 +444,42 @@ implements EntityInterface,
         }
         return $iResult;
     }
+    
+    private function _replaceConstant($value)
+    {
+        if ($value === Mapper::SYSDATE_STRING || $value === Mapper::SQL_SYSDATE_STRING) {
+            if (defined('MYSQL') && MYSQL) {
+                $value = "NOW()";                
+            } elseif (defined('ORACLE') && ORACLE) {
+                $value = "SYSDATE";                
+            }
+        } elseif ($value === Mapper::ENABLED) {
+            $value = "0";
+        } elseif ($value === Mapper::DISABLED) {
+            $value = "1";
+        } elseif ($value === Mapper::EMPTY_STRING || $value === Mapper::SQL_EMPTY_STRING) {
+            $value = "''";
+        } elseif ($value === Mapper::NULL_STRING || $value === Mapper::SQL_NULL_STRING) {
+            $value = "null";
+        } elseif ($value === '') {
+            $value = "''";
+        } elseif ($value === null) {
+            $value = '';
+        }
+        return $value;
+    }
 
     private function _isAConstant($value)
     {
-        if ($value === Mapper::SYSDATE_STRING || $value === Mapper::SQL_SYSDATE_STRING ||
-            $value === Mapper::EMPTY_STRING || $value === Mapper::SQL_EMPTY_STRING ||
-            $value === Mapper::NULL_STRING || $value === Mapper::ANY_STRING ||
-            $value === Mapper::DISABLED || $value === Mapper::ENABLED
-        ) {
+        if (in_array($value, array(
+            Mapper::SYSDATE_STRING,
+            Mapper::SQL_SYSDATE_STRING,
+            Mapper::EMPTY_STRING,
+            Mapper::SQL_EMPTY_STRING,
+            Mapper::NULL_STRING,
+            Mapper::ANY_STRING,
+            Mapper::DISABLED,
+            Mapper::ENABLED) ) ) {
             return true;
         }
         return false;

@@ -453,7 +453,9 @@ implements EntityInterface, CollectionInterface
             // Devuelve todos los campos, es para el caso de un insert
             $aFieldMapping = $this->oMapper->getFieldMapping();
             foreach ($aFieldMapping as $sAttrib => $sField) {
-                $aValues[$sField] = $this->aData[$sAttrib];
+                if (isset($this->aData[$sAttrib]) &&  $this->aData[$sAttrib] !== null) {
+                    $aValues[$sField] = $this->aData[$sAttrib];                    
+                }
             }
         }
         return $aValues;

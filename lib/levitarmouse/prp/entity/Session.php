@@ -9,6 +9,14 @@ namespace levitarmouse\prp\entity;
 
 /**
  * Subscriber class
+ * 
+ * @param string $session_id
+ * @param string $session_start
+ * @param string $last_update
+ * @param string $user_id
+ * @param string $remote_addr
+ * @param string $status
+ * 
  */
 class Session extends \levitarmouse\orm\EntityModel
 {
