@@ -12,10 +12,13 @@ namespace levitarmouse\prp\webservice;
  *
  * @author gprieto
  *
+ * @pw_element integer $errorId Error Id
+ * @pw_element string $errorCode Error code
+ * @pw_element string $errorDescription Error Description
  * @pw_element ExpensesGroup $expensesGroup expensesGroup
  * @pw_complex GetExpenseResponse
  */
-class GetExpenseResponse
+class GetExpenseResponse extends Response
 {
     public $expensesGroup;
 

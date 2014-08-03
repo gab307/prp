@@ -11,6 +11,19 @@ namespace levitarmouse\prp\entity;
  * Description of User
  *
  * @author gprieto
+ * 
+ * @param string $user_id       = USER_ID
+ * @param string $real_name     = REAL_NAME
+ * @param string $user_name     = USER_NAME
+ * @param string $mail          = MAIL
+ * @param string $password      = PASSWORD
+ * @param string $image         = IMAGE
+ * @param string $disable       = DISABLE
+ * @param string $theme_id      = THEME_ID
+ * @param string $logued        = LOGUED
+ * @param string $creation_date = CREATION_DATE
+ * @param string $last_login    = LAST_LOGIN
+ * @param string $token         = TOKEN
  */
 class User extends \levitarmouse\orm\EntityModel
 {
@@ -19,7 +32,8 @@ class User extends \levitarmouse\orm\EntityModel
         parent::__construct($dto);
 
         if ($dto->userId) {
-            $this->oMapper->getById($dto->userId);
+            $rs = $this->oMapper->getById($dto->userId);
+            $this->fill($rs);
         } else {
             if ($dto->userName && $dto->hashedPassword) {
                 $rs = $this->oMapper->getByUsernameAndPassword($dto->userName, $dto->hashedPassword);

@@ -19,6 +19,7 @@ $soap           = PhpWsdl::CreateInstance(
         Array(                    // All files with WSDL definitions in comments
         'models/PRP.php',
         '../../lib/levitarmouse/prp/webservice/GetExpenseRequest.php',
+        '../../lib/levitarmouse/prp/webservice/Response.php',
         '../../lib/levitarmouse/prp/webservice/GetExpenseResponse.php',
         '../../lib/levitarmouse/prp/webservice/Expense.php',
         '../../lib/levitarmouse/prp/webservice/ExpensesGroup.php',

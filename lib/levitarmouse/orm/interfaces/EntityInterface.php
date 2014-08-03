@@ -14,5 +14,5 @@ namespace levitarmouse\orm\interfaces;
  */
 interface EntityInterface
 {
-    public function getById(\levitarmouse\orm\dto\GetByIdDTO $dto);
+    public function getById($id);
 }

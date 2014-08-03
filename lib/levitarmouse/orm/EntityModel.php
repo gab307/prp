@@ -241,12 +241,12 @@ implements EntityInterface, CollectionInterface
      * interfaces\EntityInterface methods
      * ************************************ */
 
-    public function getById(GetByIdDTO $dto)
+    public function getById($id)
     {
         /*$iId = $dto->id;
 
         $aRs = $this->oMapper->getById($iId);*/
-        $aRs = $this->oMapper->getById($dto);
+        $aRs = $this->oMapper->getById($id);
         if (is_array($aRs)) {
             $this->fillByArray($aRs);
         } else {

@@ -35,6 +35,11 @@
           <s:documentation>Description of GetExpenseRequest</s:documentation>
         </s:annotation>
         <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="token" type="s:string">
+            <s:annotation>
+              <s:documentation>Token</s:documentation>
+            </s:annotation>
+          </s:element>
           <s:element minOccurs="1" maxOccurs="1" nillable="true" name="user_name" type="s:string">
             <s:annotation>
               <s:documentation>User Name</s:documentation>
@@ -67,17 +72,65 @@
           </s:element>
         </s:sequence>
       </s:complexType>
+      <s:complexType name="Response">
+        <s:annotation>
+          <s:documentation>Description of Response</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" nillable="false" name="errorId" type="s:integer">
+            <s:annotation>
+              <s:documentation>Error Id</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="errorCode" type="s:string">
+            <s:annotation>
+              <s:documentation>Error code</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="errorDescription" type="s:string">
+            <s:annotation>
+              <s:documentation>Error Description</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
       <s:complexType name="GetExpenseResponse">
         <s:annotation>
           <s:documentation>Description of GetExpenseResponse</s:documentation>
         </s:annotation>
-        <s:sequence></s:sequence>
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" nillable="false" name="errorId" type="s:integer">
+            <s:annotation>
+              <s:documentation>Error Id</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="errorCode" type="s:string">
+            <s:annotation>
+              <s:documentation>Error code</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="errorDescription" type="s:string">
+            <s:annotation>
+              <s:documentation>Error Description</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="expensesGroup" type="tns:ExpensesGroup">
+            <s:annotation>
+              <s:documentation>expensesGroup</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
       </s:complexType>
       <s:complexType name="Expense">
         <s:annotation>
           <s:documentation>Description of Expense</s:documentation>
         </s:annotation>
         <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" nillable="true" name="amount" type="s:string">
+            <s:annotation>
+              <s:documentation>Amount</s:documentation>
+            </s:annotation>
+          </s:element>
           <s:element minOccurs="1" maxOccurs="1" nillable="true" name="user_name" type="s:string">
             <s:annotation>
               <s:documentation>User Name</s:documentation>
@@ -106,6 +159,23 @@
           <s:element minOccurs="1" maxOccurs="1" nillable="true" name="description" type="s:string">
             <s:annotation>
               <s:documentation>Part of purchase description</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ExpensesGroup">
+        <s:annotation>
+          <s:documentation>Description of ExpensesGroup</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" nillable="false" name="countExpenses" type="s:integer">
+            <s:annotation>
+              <s:documentation>Count Expenses</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="unbounded" nillable="true" name="expense" type="tns:Expense">
+            <s:annotation>
+              <s:documentation>Expenses</s:documentation>
             </s:annotation>
           </s:element>
         </s:sequence>
@@ -142,7 +212,7 @@
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="loginSoapOut">
-    <wsdl:part name="return" type="tns:\LoginReponse">
+    <wsdl:part name="return" type="tns:LoginReponse">
       <s:documentation>$oResponse</s:documentation>
     </wsdl:part>
   </wsdl:message>
@@ -152,7 +222,7 @@
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="logoutSoapOut">
-    <wsdl:part name="return" type="tns:\LoginReponse">
+    <wsdl:part name="return" type="tns:LoginReponse">
       <s:documentation>$oResponse</s:documentation>
     </wsdl:part>
   </wsdl:message>
@@ -323,6 +393,7 @@
    <soapenv:Header/>
    <soapenv:Body>
       <prp:getExpense soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><request xsi:type="prp:GetExpenseRequest">
+            <token xsi:type="xsd:string">1</token>
             <user_name xsi:type="xsd:string">gab</user_name>
             <category_name xsi:type="xsd:string"/>
             <entity_name xsi:type="xsd:string"/>
@@ -443,4 +514,125 @@ declare namespace ns1='http://localhost/prpWS/';
          <password xsi:type="xsd:string">${#TestCase#pass}</password>
       </prp1:login>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:assertion type="Simple NotContains" name="Not Contains"><con:configuration><token>Hello</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:loadTest name="LoadTest 1"><con:settings><con:setting id="HttpSettings@close-connections">false</con:setting></con:settings><con:threadCount>10</con:threadCount><con:startDelay>0</con:startDelay><con:sampleInterval>250</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>30</con:testLimit><con:limitType>TIME</con:limitType><con:loadStrategy><con:type>Simple</con:type><con:config><testDelay>1000</testDelay><randomFactor>0.5</randomFactor></con:config></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval></con:loadTest><con:properties><con:property><con:name>token</con:name><con:value>d070nd7bjqiocf489pg700mhm6</con:value></con:property><con:property><con:name>userName</con:name><con:value>gab</con:value></con:property><con:property><con:name>separador</con:name><con:value>=12390812%</con:value></con:property><con:property><con:name>opToken</con:name><con:value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/></con:property><con:property><con:name>pass</con:name><con:value>639bee393eecbc62256936a8e64d17b1</con:value></con:property></con:properties></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:assertion type="Simple NotContains" name="Not Contains"><con:configuration><token>Hello</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:loadTest name="LoadTest 1"><con:settings><con:setting id="HttpSettings@close-connections">false</con:setting></con:settings><con:threadCount>10</con:threadCount><con:startDelay>0</con:startDelay><con:sampleInterval>250</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>30</con:testLimit><con:limitType>TIME</con:limitType><con:loadStrategy><con:type>Simple</con:type><con:config><testDelay>1000</testDelay><randomFactor>0.5</randomFactor></con:config></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval></con:loadTest><con:properties><con:property><con:name>token</con:name><con:value>6pdgke8vlvnfsv8dvfjr17pv87</con:value></con:property><con:property><con:name>userName</con:name><con:value>gab</con:value></con:property><con:property><con:name>separador</con:name><con:value>=12390812%</con:value></con:property><con:property><con:name>opToken</con:name><con:value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/></con:property><con:property><con:name>pass</con:name><con:value>639bee393eecbc62256936a8e64d17b1</con:value></con:property></con:properties></con:testCase><con:testCase failOnError="false" failTestCaseOnErrors="false" keepSession="false" maxResults="0" name="getExpenses" searchProperties="true" timeout="10000000" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword="" id="8dc755b3-1ea8-4888-a4a1-cf071916d53b"><con:settings><con:setting id="HttpSettings@socket_timeout">10000000</con:setting></con:settings><con:testStep type="request" name="hello"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PRPSoap</con:interface><con:operation>hello</con:operation><con:request name="hello"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost/working_copies/levitarmouse/prp/services/prpWS/server.php?XDEBUG_SESSION_START=netbeans-xdebug</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prp="http://localhost/prpWS/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prp1:hello soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:prp1="http://localhost/working_copies/levitarmouse/prp/services/prpWS/">
+         <token xsi:type="xsd:string"></token>
+      </prp1:hello>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:assertion type="Simple Contains" name="Contains" disabled="true"><con:configuration><token>Bienvenido</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:assertion type="XPath Match" name="XPath Match" disabled="true"><con:configuration/></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="transfer" name="Property Transfer"><con:settings/><con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:transfers setNullOnMissingSource="true" transferTextContent="true" failOnError="true" ignoreEmpty="false" transferToAll="false" useXQuery="false" entitize="false" transferChildNodes="false"><con:name>sessionId</con:name><con:sourceType>Response</con:sourceType><con:sourceStep>hello</con:sourceStep><con:sourcePath>declare namespace soap='http://schemas.xmlsoap.org/soap/envelope/';
+declare namespace ns1='http://localhost/working_copies/levitarmouse/prp/services/prpWS/';
+//ns1:helloResponse[1]/return[1]/sessionId[1]</con:sourcePath><con:targetType>token</con:targetType><con:targetStep>#TestCase#</con:targetStep></con:transfers></con:config></con:testStep><con:testStep type="request" name="hello 2"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PRPSoap</con:interface><con:operation>hello</con:operation><con:request name="hello 2"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost/working_copies/levitarmouse/prp/services/prpWS/server.php?XDEBUG_SESSION_START=netbeans-xdebug</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prp="http://localhost/working_copies/levitarmouse/prp/services/prpWS/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prp:hello soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <token xsi:type="xsd:string">${#TestCase#token}</token>
+      </prp:hello>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>${#TestCase#token}</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="pass_md5"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PRPSoap</con:interface><con:operation>md5</con:operation><con:request name="pass_md5"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost/working_copies/levitarmouse/prp/services/prpWS/server.php?XDEBUG_SESSION_START=netbeans-xdebug</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prp="http://localhost/working_copies/levitarmouse/prp/services/prpWS/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prp:md5 soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><string xsi:type="xsd:string">gab</string>
+      </prp:md5>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="transfer" name="pass_md5_trans"><con:settings/><con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:transfers setNullOnMissingSource="true" transferTextContent="true" failOnError="true" ignoreEmpty="false" transferToAll="false" useXQuery="false" entitize="false" transferChildNodes="false"><con:name>pass</con:name><con:sourceType>Response</con:sourceType><con:sourceStep>pass_md5</con:sourceStep><con:sourcePath>declare namespace soap='http://schemas.xmlsoap.org/soap/envelope/';
+declare namespace ns1='http://localhost/working_copies/levitarmouse/prp/services/prpWS/';
+//ns1:md5Response[1]/return[1]</con:sourcePath><con:targetType>pass</con:targetType><con:targetStep>#TestCase#</con:targetStep></con:transfers></con:config></con:testStep><con:testStep type="request" name="login without token" disabled="true"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PRPSoap</con:interface><con:operation>login</con:operation><con:request name="login without token"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost/working_copies/levitarmouse/prp/services/prpWS/server.php?XDEBUG_SESSION_START=netbeans-xdebug</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prp="http://localhost/prpWS/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prp1:login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:prp1="http://localhost/working_copies/levitarmouse/prp/services/prpWS/">
+         <token xsi:type="xsd:string"></token>
+         <userName xsi:type="xsd:string">gab</userName>
+         <password xsi:type="xsd:string">${#TestCase#pass}</password>
+      </prp1:login>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:assertion type="Simple Contains" name="Contains" disabled="true"><con:configuration><token>Hello</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:assertion type="Simple NotContains" name="Not Contains"><con:configuration><token>Hello</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="login with invalid token" disabled="true"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PRPSoap</con:interface><con:operation>login</con:operation><con:request name="login with invalid token"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost/working_copies/levitarmouse/prp/services/prpWS/server.php?XDEBUG_SESSION_START=netbeans-xdebug</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prp="http://localhost/prpWS/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prp1:login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:prp1="http://localhost/working_copies/levitarmouse/prp/services/prpWS/">
+         <token xsi:type="xsd:string">jf98sauf98sauf9asjf8sajf9sa</token>
+         <userName xsi:type="xsd:string">gab</userName>
+         <password xsi:type="xsd:string">${#TestCase#pass}</password>
+      </prp1:login>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:assertion type="Simple Contains" name="Contains" disabled="true"><con:configuration><token>Hello</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:assertion type="Simple NotContains" name="Not Contains"><con:configuration><token>Hello</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="login"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PRPSoap</con:interface><con:operation>login</con:operation><con:request name="login"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost/working_copies/levitarmouse/prp/services/prpWS/server.php?XDEBUG_SESSION_START=netbeans-xdebug</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prp="http://localhost/prpWS/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prp1:login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:prp1="http://localhost/working_copies/levitarmouse/prp/services/prpWS/">
+         <token xsi:type="xsd:string">${#TestCase#token}</token>
+         <userName xsi:type="xsd:string">gab</userName>
+         <password xsi:type="xsd:string">${#TestCase#pass}</password>
+      </prp1:login>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Hello</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="transfer" name="op token"><con:settings/><con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:transfers setNullOnMissingSource="true" transferTextContent="true" failOnError="true" ignoreEmpty="false" transferToAll="false" useXQuery="false" entitize="false" transferChildNodes="false"><con:name>opToken</con:name><con:sourceType>Response</con:sourceType><con:sourceStep>login</con:sourceStep><con:sourcePath>declare namespace soap='http://schemas.xmlsoap.org/soap/envelope/';
+declare namespace ns1='http://localhost/prpWS/';
+//ns1:loginResponse[1]/return[1]/token[1]</con:sourcePath><con:targetType>opToken</con:targetType><con:targetStep>#TestCase#</con:targetStep><con:targetPath/></con:transfers></con:config></con:testStep><con:testStep type="request" name="getExpenses"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PRPSoap</con:interface><con:operation>getExpense</con:operation><con:request name="getExpenses"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost/working_copies/levitarmouse/prp/services/prpWS/server.php?XDEBUG_SESSION_START=netbeans-xdebug</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prp="http://localhost/working_copies/levitarmouse/prp/services/prpWS/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prp:getExpense soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <request xsi:type="prp:GetExpenseRequest">
+            <token xsi:type="xsd:string">${#TestCase#token}</token>
+            <user_name xsi:type="xsd:string">gab</user_name>
+            <category_name xsi:type="xsd:string"></category_name>
+            <entity_name xsi:type="xsd:string"></entity_name>
+            <store_name xsi:type="xsd:string"></store_name>
+            <date xsi:type="xsd:string"></date>
+            <description xsi:type="xsd:string"></description>
+         </request>
+      </prp:getExpense>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="hello 3" disabled="true"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PRPSoap</con:interface><con:operation>hello</con:operation><con:request name="hello 3"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost/working_copies/levitarmouse/prp/services/prpWS/server.php?XDEBUG_SESSION_START=netbeans-xdebug</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prp="http://localhost/prpWS/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prp1:hello soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:prp1="http://localhost/working_copies/levitarmouse/prp/services/prpWS/">
+         <token xsi:type="xsd:string"></token>
+      </prp1:hello>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:assertion type="Simple NotContains" name="Not Contains"><con:configuration><token>${#TestCase#token}</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="login post new hello" disabled="true"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PRPSoap</con:interface><con:operation>login</con:operation><con:request name="login post new hello"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost/working_copies/levitarmouse/prp/services/prpWS/server.php?XDEBUG_SESSION_START=netbeans-xdebug</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prp="http://localhost/prpWS/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prp1:login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:prp1="http://localhost/working_copies/levitarmouse/prp/services/prpWS/">
+         <token xsi:type="xsd:string">${#TestCase#token}</token>
+         <userName xsi:type="xsd:string">gab</userName>
+         <password xsi:type="xsd:string">${#TestCase#pass}</password>
+      </prp1:login>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Hello</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="hello 4" disabled="true"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PRPSoap</con:interface><con:operation>hello</con:operation><con:request name="hello 4"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost/working_copies/levitarmouse/prp/services/prpWS/server.php?XDEBUG_SESSION_START=netbeans-xdebug</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prp="http://localhost/prpWS/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prp1:hello soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:prp1="http://localhost/working_copies/levitarmouse/prp/services/prpWS/">
+         <token xsi:type="xsd:string">${#TestCase$token}</token>
+      </prp1:hello>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:assertion type="Simple NotContains" name="Not Contains"><con:configuration><token>${#TestCase#token}</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="logout without token" disabled="true"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PRPSoap</con:interface><con:operation>logout</con:operation><con:request name="logout without token"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost/working_copies/levitarmouse/prp/services/prpWS/server.php?XDEBUG_SESSION_START=netbeans-xdebug</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prp="http://localhost/working_copies/levitarmouse/prp/services/prpWS/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prp:logout soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <token xsi:type="xsd:string"></token>
+      </prp:logout>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:assertion type="Simple NotContains" name="Not Contains"><con:configuration><token>Goodbye</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="logout with invalid token" disabled="true"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PRPSoap</con:interface><con:operation>logout</con:operation><con:request name="logout with invalid token"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost/working_copies/levitarmouse/prp/services/prpWS/server.php?XDEBUG_SESSION_START=netbeans-xdebug</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prp="http://localhost/working_copies/levitarmouse/prp/services/prpWS/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prp:logout soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <token xsi:type="xsd:string">jfoisajf98dsa7f098dsa7fsa</token>
+      </prp:logout>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:assertion type="Simple NotContains" name="Not Contains"><con:configuration><token>Goodbye</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="logout"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PRPSoap</con:interface><con:operation>logout</con:operation><con:request name="logout"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost/working_copies/levitarmouse/prp/services/prpWS/server.php?XDEBUG_SESSION_START=netbeans-xdebug</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prp="http://localhost/working_copies/levitarmouse/prp/services/prpWS/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prp:logout soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <token xsi:type="xsd:string">${#TestCase#token}</token>
+      </prp:logout>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Goodbye</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="login post logout"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PRPSoap</con:interface><con:operation>login</con:operation><con:request name="login post logout"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost/working_copies/levitarmouse/prp/services/prpWS/server.php?XDEBUG_SESSION_START=netbeans-xdebug</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prp="http://localhost/prpWS/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prp1:login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:prp1="http://localhost/working_copies/levitarmouse/prp/services/prpWS/">
+         <token xsi:type="xsd:string">${#TestCase#token}</token>
+         <userName xsi:type="xsd:string">gab</userName>
+         <password xsi:type="xsd:string">${#TestCase#pass}</password>
+      </prp1:login>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response"/><con:assertion type="Simple NotContains" name="Not Contains"><con:configuration><token>Hello</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:loadTest name="LoadTest 1"><con:settings><con:setting id="HttpSettings@close-connections">false</con:setting></con:settings><con:threadCount>10</con:threadCount><con:startDelay>0</con:startDelay><con:sampleInterval>250</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>30</con:testLimit><con:limitType>TIME</con:limitType><con:loadStrategy><con:type>Simple</con:type><con:config><testDelay>1000</testDelay><randomFactor>0.5</randomFactor></con:config></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval></con:loadTest><con:properties><con:property><con:name>token</con:name><con:value>uk9vmvkqjkq6uhksg50ol7l723</con:value></con:property><con:property><con:name>userName</con:name><con:value>gab</con:value></con:property><con:property><con:name>separador</con:name><con:value>=12390812%</con:value></con:property><con:property><con:name>opToken</con:name><con:value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/></con:property><con:property><con:name>pass</con:name><con:value>639bee393eecbc62256936a8e64d17b1</con:value></con:property></con:properties></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>

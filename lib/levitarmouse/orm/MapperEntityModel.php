@@ -220,9 +220,9 @@ implements EntityInterface,
      *
      * @return type
      */
-    public function getById(GetByIdDTO $dto)
+    public function getById($id)
     {
-        $id = $dto->id;
+//        $id = $dto->id;
 
         $sSchema      = $this->schema;
         $sMainTable   = $this->table;
