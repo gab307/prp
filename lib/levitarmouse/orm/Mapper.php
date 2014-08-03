@@ -459,7 +459,8 @@ EOQ;
                  WHERE 1 = 1
 QUERY;
 
-            if (is_a($params, 'stdClass') ) {
+            if (is_array($params) ||
+                is_a($params, 'stdClass') ) {
 
                 $sWhere = '';
                 foreach ($params as $key => $value) {

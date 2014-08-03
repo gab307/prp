@@ -12,7 +12,7 @@ namespace levitarmouse\prp\webservice;
  * Description of Response
  *
  * @author gabriel
- * 
+ *
  * @pw_element integer $errorId Error Id
  * @pw_element string $errorCode Error code
  * @pw_element string $errorDescription Error Description
@@ -37,11 +37,15 @@ class Response
         if (isset($this->_errors)) {
             return;
         }
-        $this->_errors = array(self::NO_ERRORS => array('id' => 0, 'description' => ''));
-        $this->_errors = array(self::TOKEN_IS_REQUIRED => array('id' => 1, 'description' => 'The token is required'));
-        $this->_errors = array(self::VALID_TOKEN_IS_REQUIRED => array('id' => 2, 'description' => 'The token is invalid'));
-        $this->_errors = array(self::LOGIN_IS_REQUIRED => array('id' => 3, 'description' => 'Login is required'));
-        $this->_errors = array(self::UNAUTHORIZED_ACCESS => array('id' => 4, 'description' => 'Unauthorized access'));
+        $this->errors = array();
+
+        $this->_errors = array(
+            self::NO_ERRORS => array('id' => 0, 'description' => ''),
+            self::TOKEN_IS_REQUIRED => array('id' => 1, 'description' => 'The token is required'),
+            self::VALID_TOKEN_IS_REQUIRED => array('id' => 2, 'description' => 'The token is invalid'),
+            self::LOGIN_IS_REQUIRED => array('id' => 3, 'description' => 'Login is required'),
+            self::UNAUTHORIZED_ACCESS => array('id' => 4, 'description' => 'Unauthorized access'),
+            );
     }
 
     public function setError($code)
